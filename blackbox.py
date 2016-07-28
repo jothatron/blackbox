@@ -1,3 +1,16 @@
+#####################################NOTICE######################################
+###     This program is free software: you can redistribute it and/or modify  ###
+###     it under the terms of the GNU General Public License as published by  ###
+###     the Free Software Foundation, either version 3 of the License, or     ###
+###     (at your option) any later version.                                   ###
+###     This program is distributed in the hope that it will be useful,       ###
+###                                                                           ###
+###     but WITHOUT ANY WARRANTY; without even the implied warranty of        ###
+###     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ###
+###     GNU General Public License for more details.                          ###
+###     You should have received a copy of the GNU General Public License     ###
+###     along with this program.  If not, see <http://www.gnu.org/licenses/>  ###
+#################################################################################
 import requests
 from optparse import OptionParser
 import sys, time
@@ -16,6 +29,16 @@ def __banner__():
  | __ -|  |__|     |   --|    -| __ -|  |  |-   -|_'_|
  |_____|_____|__|__|_____|__|__|_____|_____|__|__|_,_|
                                                       """+color.W+color.BOLD+"""{"""+color.C+__version__+"#Dev"+color.W+"""}"""+color.ENDC
+def __help__():
+	print """
+Usage   : """+color.ENDC+""" python """+sys.argv[0]+""" {Module}"""+color.BOLD+color.W+"""
+Help    : """+color.ENDC+""" python """+sys.argv[0]+""" -h/--help
+"""+color.W+color.BOLD+"""Modules : """+color.ENDC+"""
+  + Wordpress Bruteforce : wordpress_brut
+  + Dnsinfo              : dns_info
+  + ftp Bruteforce       : ftp_brute
+  + ssh Bruteforce       : ssh_brute
+"""
 class color:
 	P    =  '\033[95m' # purple
 	B    =  '\033[94m' # Blue
@@ -118,6 +141,8 @@ class dnsinfo:
 			print i
 def __main__():
 	for arg in sys.argv:
+		if (arg=="--help" or arg=="-h"):
+			__help__()
 		if (arg=="wordpress_brute"):
 			parser = OptionParser()
 			parser.add_option("--url",
@@ -143,6 +168,7 @@ def __main__():
 			if (len(errors) > 0):
 				for error in errors:
 					print color.BOLD+error+color.ENDC
+
 if __name__ == '__main__':
 	try:
 		__banner__()
