@@ -30,15 +30,13 @@ def __banner__():
  |_____|_____|__|__|_____|__|__|_____|_____|__|__|_,_|
                                                       """+color.W+color.BOLD+"""{"""+color.C+__version__+"#Dev"+color.W+"""}"""+color.ENDC
 def __help__():
-	print """
-Usage   : """+color.ENDC+""" python """+sys.argv[0]+""" {Module}"""+color.BOLD+color.W+"""
+	print color.W+color.BOLD+"""Usage   : """+color.ENDC+""" python """+sys.argv[0]+""" {Module}"""+color.BOLD+color.W+"""
 Help    : """+color.ENDC+""" python """+sys.argv[0]+""" -h/--help
 """+color.W+color.BOLD+"""Modules : """+color.ENDC+"""
-  + Wordpress Bruteforce : wordpress_brut
-  + Dnsinfo              : dns_info
-  + ftp Bruteforce       : ftp_brute
-  + ssh Bruteforce       : ssh_brute
-"""
+\t\t+ Wordpress Bruteforce :   wordpress_brute  | Bruteforcing wordpress panel
+\t\t+ Dnsinfo              :   dns_info         | Get Website in Server
+\t\t+ ftp Bruteforce       :   ftp_brute        | Bruteforcing Ftp login
+\t\t+ ssh Bruteforce       :   ssh_brute        | Bruteforcing Ssh login"""
 class color:
 	P    =  '\033[95m' # purple
 	B    =  '\033[94m' # Blue
