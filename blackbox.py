@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #####################################NOTICE######################################
 ###     This program is free software: you can redistribute it and/or modify  ###
 ###     it under the terms of the GNU General Public License as published by  ###
@@ -11,9 +12,8 @@
 ###     You should have received a copy of the GNU General Public License     ###
 ###     along with this program.  If not, see <http://www.gnu.org/licenses/>  ###
 #################################################################################
-import requests
+import requests,json,sys, time
 from optparse import OptionParser
-import sys, time
 
 __author__  = 'Black Eye'
 __gitbit__  = 'https://bitbucket.org/darkeye/'
@@ -35,8 +35,9 @@ Help    : """+color.ENDC+""" python """+sys.argv[0]+""" -h/--help
 """+color.W+color.BOLD+"""Modules : """+color.ENDC+"""
 \t\t+ Wordpress Bruteforce :   wordpress_brute  | Bruteforcing wordpress panel
 \t\t+ Dnsinfo              :   dns_info         | Get Website in Server
-\t\t+ ftp Bruteforce       :   ftp_brute        | Bruteforcing Ftp login
-\t\t+ ssh Bruteforce       :   ssh_brute        | Bruteforcing Ssh login"""
+\t\t+ ftp Bruteforce       :   ftp_brute        | Bruteforcing FTP login
+\t\t+ ssh Bruteforce       :   ssh_brute        | Bruteforcing SSH login"""
+
 class color:
 	P    =  '\033[95m' # purple
 	B    =  '\033[94m' # Blue
@@ -80,14 +81,12 @@ class BruteForce:
 				break
 			elif "wp-login.php" in s.url:
 				print color.G+datetime+color.C+" Login False"+color.ENDC
-
-	def joomla(self, url, wordlist):
-		pass
 	def ftp_brute(self, url, wordlist):
 		pass
 	def ssh_brute(self, url, wordlist):
 		pass
-
+	def joomla(self, url, wordlist):
+		pass
 
 class rce:
 	def joomla(self):
@@ -166,6 +165,22 @@ def __main__():
 			if (len(errors) > 0):
 				for error in errors:
 					print color.BOLD+error+color.ENDC
+		if (arg == "dns_info"):
+			parser = OptionParser()
+			parser.add_option("--ip",
+				help="Parse IP address")
+			parser.add_option("--viewdns","-v",
+				help="Get website from viewdns",action="store_true")
+			parser.add_option("--yougetsignal","-y",
+				help="Get website from yougetsignal",action="store_true")
+			(options,args) = parser.parse_args()
+			ip = options.ip
+			viewdns = options.viewdns
+			yougetsignal = options.yougetsignal
+			if ip and viewdns==True:
+				dnsinfo().viewdns(ip)
+			if ip and yougetsignal==True:
+				dnsinfo().yougetsignal(ip)
 
 if __name__ == '__main__':
 	try:
