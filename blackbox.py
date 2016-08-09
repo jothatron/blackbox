@@ -38,6 +38,7 @@ def __help__():
 	print "\t\t+ Wordpress Bruteforce          :   wordpress_brute"
 	print "\t\t+ Dnsinfo                       :   dns_info"
 	print "\t\t+ Joomla Rce                    :   rce_joomla"
+	print "\t\t+ Google Dorker                 :   google_dorker"
 	print "\t\t+ update Database (sudo needed) :   -u/--update"
 
 def __update__():
