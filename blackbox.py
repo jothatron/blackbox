@@ -12,7 +12,7 @@
 ###     You should have received a copy of the GNU General Public License     ###
 ###     along with this program.  If not, see <http://www.gnu.org/licenses/>  ###
 #################################################################################
-import requests,json,sys, time, re, git, os
+import requests,json,sys, time, re, os
 from time import gmtime, strftime
 from optparse import OptionParser
 
@@ -40,15 +40,8 @@ def __help__():
 	print "\t\t+ Joomla Rce                    :   rce_joomla"
 	print "\t\t+ Google Dorker                 :   google_dorker"
 	print "\t\t+ update Database (sudo needed) :   -u/--update"
-
 def __update__():
-	try:
-		os.chdir('/tmp')
-		git.Git().clone("https://darkeye@bitbucket.org/darkeye/blackboxx.git", "blackbox")
-		print "Database Updated !"
-	except git.exc.GitCommandError as e:
-		print "Error "+str(e)
-
+	pass
 class color:
 	P    =  '\033[95m' # purple
 	B    =  '\033[94m' # Blue
