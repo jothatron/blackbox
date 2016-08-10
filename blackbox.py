@@ -258,10 +258,6 @@ class rce:
 ##                                ##
 ####################################
 class dnsinfo:
-	def checkhost(self, url):
-		get = requests.get(url).status_code
-		if get==200:
-			pass
 	def yougetsignal(self, ip):
 		def Details():
 			yougetsignal = 'http://domains.yougetsignal.com/domains.php'
@@ -353,9 +349,9 @@ def __main__():
 			parser.add_option("--dork","-d",
 				help="Dork for get URL")
 			parser.add_option("--start", metavar="NUMBER", type=int, default=0,
-				help="Number of page")
+				help="Number of page for start")
 			parser.add_option("--stop", metavar="NUMBER", type=int, default=0,
-				help="Number of page")
+				help="Number of page to stop")
 			#parser.add_option("--ssl",
 			#	help="Get HTTPS(SSL) Website",action="store_true")
 			#parser.add_option("--no-ssl",
@@ -371,6 +367,8 @@ def __main__():
 
 		if (arg=="-u" or arg=="--update"):
 			__update__()
+		if (arg==None):
+			print "--help"
 
 if __name__ == '__main__':
 	try:
