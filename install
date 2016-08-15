@@ -11,3 +11,4 @@ chmod 755 /bin/blackbox
 chmod +x /bin/blackbox
 rm -rf blackbox/
 blackbox
+echo"Worked Now you can use blackbox using command 'blackbox'"
