@@ -3,9 +3,11 @@ if [ $(whoami) != "root" ];then
     echo "You must be root to do this."
     exit 1
 fi
-cp blackbox/ /opt
+cd ..
+cp -R blackbox/ /opt/
 echo '#!/bin/sh' > /bin/blackbox
 echo 'python /opt/blackbox/blackbox.py "$@"' >> /bin/blackbox
 chmod 755 /bin/blackbox
 chmod +x /bin/blackbox
+rm -rf blackbox/
 blackbox
