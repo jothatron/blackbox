@@ -233,7 +233,6 @@ class dorker:
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(link))+" FOUND"+color.ENDC
 		for i in link:
 			print i
-			checker().lfi(i)
 
 
 ####################################
