@@ -15,6 +15,7 @@
 ### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/
 ### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/
 import requests,json,sys, time, re, os, base64, random
+from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
 from urlparse import parse_qs, urlparse
@@ -63,7 +64,18 @@ class color:
 	M    =  '\033[95m' # Magenta
 	C    =  '\033[96m' # Cyan
 	ENDC =  '\033[0m'  # end colors
-
+	if sys.platform == 'win32':
+		P    =  '' # purple
+		B    =  '' # Blue
+		BOLD =  ''  # Bold
+		G    =  '' # Green
+		Y    =  '' # Yellow
+		R    =  '' # Red
+		W    =  '' # White
+		BL   =  '' # Black
+		M    =  '' # Magenta
+		C    =  '' # Cyan
+		ENDC =  '' # end colors
 
 class checker:
 	def lfi(self, url):
