@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 if [ $(whoami) != "root" ];then
     echo "You must be root to do this."
     exit 1
