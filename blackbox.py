@@ -14,11 +14,10 @@
 #################################################################################
 ### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/
 ### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/
-import requests,json,sys, time, re, os, base64, random
+import requests,json,sys, time, re, os, base64, random,urllib2
 from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
-from urlparse import parse_qs, urlparse
 
 __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
@@ -153,6 +152,7 @@ class checker:
 ####################################
 class dorker:
 	def google(self, dork, start, stop):
+		from google import search
 		urll = []
 		def randomm():
 			tld = [
@@ -196,33 +196,13 @@ class dorker:
 			tld_rand = random.sample(tld, 1)
 			for tldd in tld_rand:
 				return tldd
-		tld = randomm()
-		def google_search():
-			google = "https://www.google."+tld+"/search?q="+dork+"&start="+str(start)
-			return google
-		def get_url(url):
-			headers = {'User-Agent'  : 'Googlebot/2.1b'}
-			html = requests.get(url, headers=headers).content
-			k = re.findall(r'<h3 class="r"><a href="(.*?)"', html)
-			for s in k:
-				s=s.strip()
-				if s.startswith('/url?'):
-					o = urlparse(s, 'http')
-					link = parse_qs(o.query)['q'][0]
-					urll.append(link)
-					ope = open("url.txt", "a")
-					ope.write(link+"\n")
-					ope.close
-		def search_url(start, stop):
-			while start<stop:
-				google_start = "https://www.google."+tld+"/search?q="+dork+"&start="+str(start)
-				start+="10"
-				get_url(google_start)
-			print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(urll))+" FOUND"
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" GOOLGE TLD    :  ."+tld
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" SEARCH URL    :  "+google_search()
+		tldd = randomm()
+		k = search(dork, tld=tldd, start=start, stop=stop)
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" GOOLGE TLD    :  ."+tldd
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork+color.ENDC
-		search_url(start, stop)
+		#print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(k))+" FOUND"
+		for link in k:
+			print link
 	def bing(self, ip,dork):
 		bing ='http://www.bing.com/search?q=ip:'+ip+'+'+dork+'=&count=50000'
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" SEARCH URL    :  "+bing
@@ -453,16 +433,16 @@ def __main__():
 			parser = OptionParser()
 			parser.add_option("--dork","-d",
 				help="Dork for get URL")
-			parser.add_option("--start",default=0,
+			parser.add_option("--start",type=int,
 				help="Number of page for start")
-			parser.add_option("--stop",
+			parser.add_option("--stop",type=int,
 				help="Number of page to stop")
 			(options,args) = parser.parse_args()
 			dork = options.dork
 			start = options.start
 			stop = options.stop
-			if dork and start and stop:
-				dorker().google(dork, start, stop)
+			#if dork and start and stop:
+			dorker().google(dork, start, stop)
 		if (arg=="bing_dorker"):
 			parser = OptionParser()
 			parser.add_option("--ip")
@@ -482,3 +462,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print color.BOLD+color.Y+"Exiting Now !"+color.ENDC
 		sys.exit(0)
+	except urllib2.HTTPError:
+		print color.BOLD+color.R+"503 : Error Retry Later Plz !"+color.ENDC
