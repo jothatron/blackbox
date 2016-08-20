@@ -5,6 +5,7 @@ if [ $(whoami) != "root" ];then
 fi
 cd ..
 pip install google
+pip install requests
 cp -R blackbox/ /opt/
 echo '#!/bin/sh' > /bin/blackbox
 echo 'python /opt/blackbox/blackbox.py "$@"' >> /bin/blackbox
