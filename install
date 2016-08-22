@@ -4,7 +4,6 @@ if [ $(whoami) != "root" ];then
     exit 1
 fi
 cd ..
-pip install google
 pip install requests
 cp -R blackbox/ /opt/
 echo '#!/bin/sh' > /bin/blackbox
