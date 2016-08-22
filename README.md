@@ -15,4 +15,6 @@ A Penetration Testing Framework
 + Bing Dorker          - bing dorker
 
 #Installation
-git clone https://github.com/x3omdax/PenBox.git
+git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox
+chmod +x install
+sudo ./install
