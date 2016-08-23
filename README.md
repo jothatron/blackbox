@@ -15,6 +15,8 @@ A Penetration Testing Framework
 + Bing Dorker          - bing dorker
 
 #Installation
+```
 git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox
 chmod +x install
-sudo ./install
+sudo ./install 
+```
