@@ -13,7 +13,7 @@
 + Google Dorker        - google dorker
 + Bing Dorker          - bing dorker
 
-#Installation
+#Installation :
 ```
 git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox
 chmod +x install
