@@ -1,7 +1,7 @@
 # BLACKBOXx – A Penetration Testing Framework
 A Penetration Testing Framework
 
-# Password Attacks : 
+# Password Attacks (Soon): 
 + MD5 CRACKER
 + SHA* CRACKER
 + NTLM CRACKER
