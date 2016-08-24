@@ -18,7 +18,7 @@
 
 #Installation :
 ```
-git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox
+git clone https://darkeye@bitbucket.org/darkeye/blackbox-tool.git blackbox && cd blackbox
 chmod +x install
 sudo ./install 
 ```
