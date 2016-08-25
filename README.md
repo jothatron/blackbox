@@ -3,6 +3,7 @@
 [![Python 2.7](https://img.shields.io/badge/python-2.7-yellow.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-GPLv2-green.svg)](https://bitbucket.org/darkeye/blackbox/raw/master/COPYING)
 [![Twitter](https://img.shields.io/badge/twitter-@blackeye-blue.svg)](https://twitter.com/0x676)
+[![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg)](https://www.facebook.com/0xZeus.py)
 # Password Attacks (Soon): 
 + MD5 CRACKER
 + SHA* CRACKER
