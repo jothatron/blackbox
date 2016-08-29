@@ -6,7 +6,11 @@
 [![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg)](https://www.facebook.com/0xZeus.py)
 # Password Attacks (Soon): 
 + MD5 CRACKER
-+ SHA* CRACKER
++ SHA1  CRACKER
++ SHA224 CRACKER
++ SHA256 CRACKER
++ SHA384 CRACKER
++ SHA512 CRACKER
 + NTLM CRACKER
 
 # Web Hacking :
