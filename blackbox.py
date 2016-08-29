@@ -19,11 +19,12 @@ import requests,json,sys, time, re, os, base64, random,hashlib,timeit
 from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
+from passlib.hash import nthash
 __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '0.8'
+__version__    = '0.9'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOXx v%s' % (__version__)
 
@@ -542,6 +543,17 @@ class cracker:
 					print "Hash Found : "+o+" : "+i
 			stop = timeit.default_timer()
 		print "Elapsed Time : "+str(stop - start)+"s"
+	def ntlm(self,wordlist, ha):
+		wordlist = open(wordlist, "r")
+		wordlist = wordlist.readlines()
+		ha = open(ha, "r")
+		ha = ha.readlines()
+		for word in wordlist:
+			word=word.strip()
+			h = nthash.encrypt(word)
+			for has in ha:
+				if has == h:
+					print "Found : "+has+" : "+word
 
 
 ####################################
@@ -649,6 +661,7 @@ def __main__():
 			parser.add_option("--sha256", help="Path of SHA256 hash")
 			parser.add_option("--sha384", help="Path of SHA384 hash")
 			parser.add_option("--sha512", help="Path of SHA512 hash")
+			parser.add_option("--ntlm", help="Path of NTLM hash")
 			(options,args) = parser.parse_args()
 			wordlist = options.wordlist
 			md5 = options.md5
@@ -657,6 +670,7 @@ def __main__():
 			sha256 = options.sha256
 			sha384 = options.sha384
 			sha512 = options.sha512
+			ntlm = options.ntlm
 			crack = cracker()
 			if md5 and wordlist:
 				crack.md5(md5, wordlist)
@@ -670,6 +684,8 @@ def __main__():
 				crack.sha384(sha384, wordlist)
 			if sha512 and wordlist:
 				crack.sha512(sha512, wordlist)
+			if ntlm and wordlist:
+				crack.ntlm(ntlm,wordlist)
 		if (arg=="-u" or arg=="--update"):
 			__update__()
 if __name__ == '__main__':
