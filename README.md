@@ -18,8 +18,8 @@
 + ######Dnsinfo              – dns info via Yougetsignal & viewdns & hackertarget
 + ######Magento Rce          – Rce magento
 + ######Joomla  Rce          – 1.5 - 3.4.5 remote code execution
-+ ######Google Dorker        – google dorker
-+ ######Bing Dorker          – bing dorker
++ ######Google Dorker        – google dorker (LFI SCANNER)
++ ######Bing Dorker          – bing dorker (LFI SCANNER )
 
 ####Installation :
 ```
