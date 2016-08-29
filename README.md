@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-GPLv2-green.svg)](https://bitbucket.org/darkeye/blackbox/raw/master/COPYING)
 [![Twitter](https://img.shields.io/badge/twitter-@blackeye-blue.svg)](https://twitter.com/0x676)
 [![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg)](https://www.facebook.com/0xZeus.py)
-# Password Attacks (Soon): 
+# Password Attacks: 
 + MD5 CRACKER
 + SHA1  CRACKER
 + SHA224 CRACKER
