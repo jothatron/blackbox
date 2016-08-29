@@ -14,7 +14,8 @@
 #################################################################################
 ### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/
 ### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/
-import requests,json,sys, time, re, os, base64, random
+
+import requests,json,sys, time, re, os, base64, random,hashlib,timeit
 from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
@@ -43,8 +44,9 @@ def __help__():
 	print "\t\t+ Dnsinfo                       :   dns_info"
 	print "\t\t+ Joomla Rce                    :   rce_joomla"
 	print "\t\t+ Magento Rce                   :   rce_magento"
-	print "\t\t+ Google Dorker                 :   google_dorker"
-	print "\t\t+ Bing Dorker                   :   bing_dorker"
+	print "\t\t+ Google Dorker                 :   google_dorker(lfi scan)"
+	print "\t\t+ Bing Dorker                   :   bing_dorker(lfi scan)"
+	print "\t\t+ Crack Hash(MD5/SHA*/NTLM)     :   hash_killer"
 	print "\t\t+ update Database (sudo needed) :   -u/--update"
 
 def __update__():
@@ -144,11 +146,14 @@ class checker:
 				continue
 	def sqli(self, url):
 		pass
+
+
 ####################################
 ##                                ##
 ##            DORKER              ##
 ##                                ##
 ####################################
+
 class dorker:
 	gurl=[]
 	def google(self, dork, start, stop):
@@ -440,6 +445,110 @@ class dnsinfo:
 			print color.W+color.BOLD+"[+] "+str(len(black))+" FOUND"+color.ENDC
 			print color.W+color.BOLD+"[+] Domains is saved in "+domain+".txt"+color.ENDC
 
+####################################
+##                                ##
+##         HASH CRACKER           ##
+##                                ##
+####################################
+class cracker:
+	def md5(self, md5, wordlist):
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		word = wordlist.readlines()
+		md5 = open(md5, "r")
+		md5 = md5.readlines()
+		for i in word:
+			i=i.strip()
+			for o in md5:
+				o=o.strip()
+				wordlistmd5 = hashlib.md5(o).hexdigest()
+				if i==wordlistmd5:
+					print "Hash Found :\n"+o+" : "+i
+		stop = timeit.default_timer()
+		print "Elapsed Time : "+str(stop - start)+"s"
+
+	def sha1(self, sha1, wordlist):
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		word = wordlist.readlines()
+		sha1 = open(sha1, "r")
+		sha1 = sha1.readlines()
+		for i in word:
+			i=i.strip()
+			for o in sha1:
+				o=o.strip()
+				wordlistsha1 = hashlib.sha1(o).hexdigest()
+				if i==wordlistsha1:
+					print "Hash Found : "+o+" : "+i
+			stop = timeit.default_timer()
+		print "Elapsed Time : "+str(stop - start)+"s"
+	def sha224(self, sha224, wordlist):
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		word = wordlist.readlines()
+		sha224 = open(sha224, "r")
+		sha224 = sha224.readlines()
+		for i in word:
+			i=i.strip()
+			for o in sha224:
+				o=o.strip()
+				wordlistsha1 = hashlib.sha224(o).hexdigest()
+				if i==wordlistsha1:
+					print "Hash Found : "+o+" : "+i
+			stop = timeit.default_timer()
+		print "Elapsed Time : "+str(stop - start)+"s"
+	def sha256(self, sha256, wordlist):
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		word = wordlist.readlines()
+		sha256 = open(sha256, "r")
+		sha256 = sha256.readlines()
+		for i in word:
+			i=i.strip()
+			for o in sha256:
+				o=o.strip()
+				wordlistsha1 = hashlib.sha256(o).hexdigest()
+				if i==wordlistsha1:
+					print "Hash Found : "+o+" : "+i
+			stop = timeit.default_timer()
+		print "Elapsed Time : "+str(stop - start)+"s"
+	def sha384(self, sha384, wordlist):
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		word = wordlist.readlines()
+		sha384 = open(sha384, "r")
+		sha384 = sha384.readlines()
+		for i in word:
+			i=i.strip()
+			for o in sha384:
+				o=o.strip()
+				wordlistsha1 = hashlib.sha384(o).hexdigest()
+				if i==wordlistsha1:
+					print "Hash Found : "+o+" : "+i
+			stop = timeit.default_timer()
+		print "Elapsed Time : "+str(stop - start)+"s"
+	def sha512(self, sha512, wordlist):
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		word = wordlist.readlines()
+		sha512 = open(sha512, "r")
+		sha512 = sha512.readlines()
+		for i in word:
+			i=i.strip()
+			for o in sha512:
+				o=o.strip()
+				wordlistsha1 = hashlib.sha512(o).hexdigest()
+				if i==wordlistsha1:
+					print "Hash Found : "+o+" : "+i
+			stop = timeit.default_timer()
+		print "Elapsed Time : "+str(stop - start)+"s"
+
+
+####################################
+##                                ##
+##             MAIN               ##
+##                                ##
+####################################
 def __main__():
 	__banner__()
 	for arg in sys.argv:
@@ -531,7 +640,36 @@ def __main__():
 			dork = options.dork
 			if ip and dork:
 				dorker().bing(ip,dork)
-
+		if (arg=="hash_killer"):
+			parser = OptionParser()
+			parser.add_option("-w","--wordlist",help="Path Of Wordlist !")
+			parser.add_option("--md5", help="Path of MD5 hash")
+			parser.add_option("--sha1", help="Path of SHA1 hash")
+			parser.add_option("--sha224", help="Path of SHA224 hash")
+			parser.add_option("--sha256", help="Path of SHA256 hash")
+			parser.add_option("--sha384", help="Path of SHA384 hash")
+			parser.add_option("--sha512", help="Path of SHA512 hash")
+			(options,args) = parser.parse_args()
+			wordlist = options.wordlist
+			md5 = options.md5
+			sha1 = options.sha1
+			sha224 = options.sha224
+			sha256 = options.sha256
+			sha384 = options.sha384
+			sha512 = options.sha512
+			crack = cracker()
+			if md5 and wordlist:
+				crack.md5(md5, wordlist)
+			if sha1 and wordlist:
+				crack.sha1(sha1, wordlist)
+			if sha224 and wordlist:
+				crack.sha224(sha224, wordlist)
+			if sha256 and wordlist:
+				crack.sha256(sha256, wordlist)
+			if sha384 and wordlist:
+				crack.sha384(sha384, wordlist)
+			if sha512 and wordlist:
+				crack.sha512(sha512, wordlist)
 		if (arg=="-u" or arg=="--update"):
 			__update__()
 if __name__ == '__main__':
