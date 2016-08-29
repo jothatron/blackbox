@@ -24,7 +24,7 @@ __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '0.9'
+__version__    = '0.8'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOXx v%s' % (__version__)
 
@@ -142,9 +142,9 @@ class checker:
 		for i in LFI:
 			r = requests.get(i)
 			if "root" in r.content:
-				print color.W+color.BOLD+"LFI FOUND :"+color.Y+i
+				print color.W+color.BOLD+"LFI FOUND :"+color.Y+i+color.ENDC
 			else:
-				continue
+				print "Not Found : "+i
 	def sqli(self, url):
 		pass
 
@@ -156,7 +156,7 @@ class checker:
 ####################################
 
 class dorker:
-	gurl=[]
+	gurl,burl=[],[]
 	def google(self, dork, start, stop):
 		from cookielib import LWPCookieJar
 		from urllib2 import Request, urlopen
@@ -256,9 +256,11 @@ class dorker:
 			link = re.findall(r'<h2><a href="(.*?)"', html)
 			for i in link:
 				url.append(i)
+				self.burl.append(i)
 				bopen.write(i+"\n")
 			page += 50
 		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(url))+" FOUND"+color.ENDC
+	pass
 
 
 ####################################
@@ -566,6 +568,8 @@ def __main__():
 	for arg in sys.argv:
 		if (arg=="--help" or arg=="-h"):
 			__help__()
+
+
 		if (arg=="wordpress_brute"):
 			parser = OptionParser()
 			parser.add_option("--url",
@@ -591,6 +595,8 @@ def __main__():
 			if (len(errors) > 0):
 				for error in errors:
 					print color.BOLD+error+color.ENDC
+
+
 		if (arg == "dns_info"):
 			parser = OptionParser()
 			parser.add_option("--ip",
@@ -612,6 +618,8 @@ def __main__():
 				dnsinfo().viewdns(ip)
 			if ip and hackertarget==True:
 				dnsinfo().hackertarget(ip)
+
+
 		if (arg=="rce_joomla"):
 			parser = OptionParser()
 			parser.add_option("--wordlist","-w",
@@ -620,6 +628,8 @@ def __main__():
 			wordlist = options.wordlist
 			if wordlist:
 				rce().joomla(wordlist)
+
+
 		if (arg=="rce_magento"):
 			parser = OptionParser()
 			parser.add_option("--wordlist","-w",
@@ -628,6 +638,8 @@ def __main__():
 			wordlist = options.wordlist
 			if wordlist:
 				rce().magento(wordlist)
+
+
 		if (arg=="google_dorker"):
 			parser = OptionParser()
 			parser.add_option("--dork","-d",
@@ -636,22 +648,44 @@ def __main__():
 				help="Number of page for start")
 			parser.add_option("--stop",type=int,
 				help="Number of page to stop")
+			parser.add_option("--lfi",
+			help="Scan Founded website from LFI", action="store_true")
 			(options,args) = parser.parse_args()
 			dork = options.dork
 			start = options.start
 			stop = options.stop
+			lfi = options.lfi
 			if dork and start is not None and stop is not None: 
 				dorker().google(dork, start, stop)
+			if  dork and start is not None and stop is not None and lfi==True:
+				print color.R+color.BOLD+"LFI Scanner : "+color.ENDC
+				gurl= dorker().gurl
+				for urll in gurl:
+					urll= urll.strip()
+					checker().lfi(urll)
+
+
 		if (arg=="bing_dorker"):
 			parser = OptionParser()
 			parser.add_option("--ip")
 			parser.add_option("--dork","-d",
 				help="Dork for get URL")
+			parser.add_option("--lfi",
+			help="Scan Founded website from LFI", action="store_true")
 			(options,args) = parser.parse_args()
 			ip = options.ip
 			dork = options.dork
+			lfi = options.lfi
 			if ip and dork:
 				dorker().bing(ip,dork)
+			if ip and dork and lfi==True:
+				print color.R+color.BOLD+"LFI Scanner : "+color.ENDC
+				burl= dorker().burl
+				for urll in burl:
+					urll= urll.strip()
+					checker().lfi(urll)
+
+
 		if (arg=="hash_killer"):
 			parser = OptionParser()
 			parser.add_option("-w","--wordlist",help="Path Of Wordlist !")
