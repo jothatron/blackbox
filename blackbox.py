@@ -707,17 +707,17 @@ def __main__():
 			ntlm = options.ntlm
 			crack = cracker()
 			if md5 and wordlist:
-				crack.md5(md5, wordlist)
+				crack.md5(wordlist, md5)
 			if sha1 and wordlist:
-				crack.sha1(sha1, wordlist)
+				crack.sha1(wordlist, sha1)
 			if sha224 and wordlist:
-				crack.sha224(sha224, wordlist)
+				crack.sha224(wordlist, sha224)
 			if sha256 and wordlist:
-				crack.sha256(sha256, wordlist)
+				crack.sha256(wordlist, sha256)
 			if sha384 and wordlist:
-				crack.sha384(sha384, wordlist)
+				crack.sha384(wordlist, sha384)
 			if sha512 and wordlist:
-				crack.sha512(sha512, wordlist)
+				crack.sha512(wordlist, sha512)
 			if ntlm and wordlist:
 				crack.ntlm(ntlm,wordlist)
 		if (arg=="-u" or arg=="--update"):
