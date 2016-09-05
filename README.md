@@ -22,7 +22,7 @@
 + ######Bing Dorker          – bing dorker (LFI SCANNER )
 
 ####Installation :
-```::bash
+```bash
 $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox
 $ chmod +x install
 $ sudo ./install && cd
