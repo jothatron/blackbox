@@ -11,7 +11,6 @@
 + ######SHA256 CRACKER
 + ######SHA384 CRACKER
 + ######SHA512 CRACKER
-+ ######NTLM CRACKER
 
 #### Web Hacking :
 + ######Wordpress Bruteforce – Bruteforce wordpress panel
