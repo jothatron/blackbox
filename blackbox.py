@@ -25,7 +25,7 @@ __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '0.8'
+__version__    = '1.2'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOXx v%s' % (__version__)
 
