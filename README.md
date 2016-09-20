@@ -15,7 +15,7 @@
 #### Web Hacking :
 + ######Wordpress Bruteforce – Bruteforce wordpress panel
 + ######Dnsinfo              – dns info via Yougetsignal & viewdns & hackertarget
-+ ######Magento Rce          – Rce magento
++ ######Magento Rce          – Magento eCommerce - Remote Code Execution
 + ######Joomla  Rce          – 1.5 - 3.4.5 remote code execution
 + ######Google Dorker        – google dorker (LFI/SQLi SCANNER)
 + ######Bing Dorker          – bing dorker (LFI/SQLi SCANNER )
