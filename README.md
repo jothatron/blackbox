@@ -1,4 +1,4 @@
-### BLACKBOXx – A Penetration Testing Framework
+### BLACKBOx – A Penetration Testing Framework
 
 [![Python 2.7 | 3.5](https://img.shields.io/badge/python-2.7%20%7C%203.5-yellow.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-GPLv2-red.svg)](https://bitbucket.org/darkeye/blackbox/raw/master/COPYING)
@@ -19,6 +19,7 @@
 + ######Joomla  Rce          – 1.5 - 3.4.5 remote code execution
 + ######Google Dorker        – google dorker (LFI/SQLi SCANNER)
 + ######Bing Dorker          – bing dorker (LFI/SQLi SCANNER )
++ ######Prestashop Exploit   – PrestaShop Arbitrary file Upload (6 Modules)
 
 ####Installation :
 ```bash
