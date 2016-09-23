@@ -29,15 +29,17 @@
 ```bash
 $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox && chmod +x install && sudo ./install && cd
 ```
+##Version :
 --------------------------------------
-### Version 1.4:
+###1.4v:
 + ######Add Prestashop Exploit
 + ######Add Admin Page finder 
 + ######Add FTP Bruteforcer
 + ######Add SSH Bruteforcer
 + ######Fix google dorker
 --------------------------------------
-### Version 1.5:
+###1.5v:
 + ######Fix LFI Scanner for google & bing dorker
 + ######Fix some python 3.5 error 
 + ######Fix Admin page finder
++ ######Fix Hash cracker
