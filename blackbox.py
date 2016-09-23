@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 #####################################NOTICE######################################
 ###     This program is free software: you can redistribute it and/or modify  ###
 ###     it under the terms of the GNU General Public License as published by  ###
@@ -42,24 +42,24 @@ def __banner__():
 	print color.W+color.BOLD+"                                                {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC
 
 def __help__():
-	print color.W+color.BOLD+"Usage   : "+color.ENDC+sys.argv[0]+" {Module}"
-	print color.BOLD+color.Y+"Bruteforcing : "+color.ENDC
-	print "\t+ Wordpress Bruteforce  : wordpress_brute        | Bruteforcing WP PANEL"
-	print "\t+ Admin Page Finder     : admin_brute            | Find Admin Page"
-	#print "\t+ PMA Page Finder       : pma_brute              | Find PhpMyAdmin Page"
-	print "\t+ SSH Bruteforce        : ssh_brute              | Bruteforcing SSH LOGIN"
-	print "\t+ FTP Bruteforce        : ftp_brute              | Bruteforcing FTP LOGIN"
-	print color.BOLD+color.Y+"Information Gathering : "+color.ENDC
-	print "\t+ Dnsinfo               : dns_info               | Get All Website from IP"
-	print color.BOLD+color.Y+"Exploit : "+color.ENDC
-	print "\t+ Joomla Rce            : rce_joomla             | 1.5 - 3.4.5 remote code execution"
-	print "\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution"
-	print "\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit"
-	print color.BOLD+color.Y+"Dorking : "+color.ENDC
-	print "\t+ Google Dorker         : google_dorker(lfi scan)| Google Dorker "
-	print "\t+ Bing Dorker           : bing_dorker(lfi scan)  | Bing Dorker via IP"
-	print color.BOLD+color.Y+"Cracking : "+color.ENDC
-	print "\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack MD5-SHA* HASH\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384"
+	print (color.W+color.BOLD+"Usage   : "+color.ENDC+sys.argv[0]+" {Module}")
+	print (color.BOLD+color.Y+"Bruteforcing : "+color.ENDC)
+	print ("\t+ Wordpress Bruteforce  : wordpress_brute        | Bruteforcing WP PANEL")
+	print ("\t+ Admin Page Finder     : admin_brute            | Find Admin Page")
+	#print ("\t+ PMA Page Finder       : pma_brute              | Find PhpMyAdmin Page")
+	print ("\t+ SSH Bruteforce        : ssh_brute              | Bruteforcing SSH LOGIN")
+	print ("\t+ FTP Bruteforce        : ftp_brute              | Bruteforcing FTP LOGIN")
+	print (color.BOLD+color.Y+"Information Gathering : "+color.ENDC)
+	print ("\t+ Dnsinfo               : dns_info               | Get All Website from IP")
+	print (color.BOLD+color.Y+"Exploit : "+color.ENDC)
+	print ("\t+ Joomla Rce            : rce_joomla             | 1.5 - 3.4.5 remote code execution")
+	print ("\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution")
+	print ("\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit")
+	print (color.BOLD+color.Y+"Dorking : "+color.ENDC)
+	print ("\t+ Google Dorker         : google_dorker(lfi scan)| Google Dorker ")
+	print ("\t+ Bing Dorker           : bing_dorker(lfi scan)  | Bing Dorker via IP")
+	print (color.BOLD+color.Y+"Cracking : "+color.ENDC)
+	print ("\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack MD5-SHA* HASH\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384")
 
 def __update__():
 	pass
@@ -726,6 +726,8 @@ class dnsinfo:
 class cracker:
 	def md5(self, md5, wordlist):
 		start = timeit.default_timer()
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" MD5 HASH PATH : "+md5+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH : "+wordlist+color.ENDC)
 		wordlist = open(wordlist, "r")
 		word = wordlist.readlines()
 		md5 = open(md5, "r")
@@ -736,11 +738,13 @@ class cracker:
 				o=o.strip()
 				wordlistmd5 = hashlib.md5(o).hexdigest()
 				if i==wordlistmd5:
-					print "Hash Found :\n"+o+" : "+i
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+o+" : "+i+color.ENDC)
 		stop = timeit.default_timer()
-		print "Elapsed Time : "+str(stop - start)+"s"
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 
 	def sha1(self, sha1, wordlist):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SHA1 HASH PATH : "+sha1+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH  : "+wordlist+color.ENDC)
 		start = timeit.default_timer()
 		wordlist = open(wordlist, "r")
 		word = wordlist.readlines()
@@ -752,10 +756,12 @@ class cracker:
 				o=o.strip()
 				wordlistsha1 = hashlib.sha1(o).hexdigest()
 				if i==wordlistsha1:
-					print "Hash Found : "+o+" : "+i
-			stop = timeit.default_timer()
-		print "Elapsed Time : "+str(stop - start)+"s"
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+o+" : "+i+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 	def sha224(self, sha224, wordlist):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SHA224 HASH PATH : "+sha224+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH    : "+wordlist+color.ENDC)
 		start = timeit.default_timer()
 		wordlist = open(wordlist, "r")
 		word = wordlist.readlines()
@@ -767,10 +773,12 @@ class cracker:
 				o=o.strip()
 				wordlistsha1 = hashlib.sha224(o).hexdigest()
 				if i==wordlistsha1:
-					print "Hash Found : "+o+" : "+i
-			stop = timeit.default_timer()
-		print "Elapsed Time : "+str(stop - start)+"s"
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+o+" : "+i+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 	def sha256(self, sha256, wordlist):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SHA256 HASH PATH : "+sha256+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH    : "+wordlist+color.ENDC)
 		start = timeit.default_timer()
 		wordlist = open(wordlist, "r")
 		word = wordlist.readlines()
@@ -782,10 +790,12 @@ class cracker:
 				o=o.strip()
 				wordlistsha1 = hashlib.sha256(o).hexdigest()
 				if i==wordlistsha1:
-					print "Hash Found : "+o+" : "+i
-			stop = timeit.default_timer()
-		print "Elapsed Time : "+str(stop - start)+"s"
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+o+" : "+i+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 	def sha384(self, sha384, wordlist):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SHA384 HASH PATH : "+sha384+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH    : "+wordlist+color.ENDC)
 		start = timeit.default_timer()
 		wordlist = open(wordlist, "r")
 		word = wordlist.readlines()
@@ -797,10 +807,12 @@ class cracker:
 				o=o.strip()
 				wordlistsha1 = hashlib.sha384(o).hexdigest()
 				if i==wordlistsha1:
-					print "Hash Found : "+o+" : "+i
-			stop = timeit.default_timer()
-		print "Elapsed Time : "+str(stop - start)+"s"
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+o+" : "+i+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 	def sha512(self, sha512, wordlist):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SHA512 HASH PATH : "+sha512+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH    : "+wordlist+color.ENDC)
 		start = timeit.default_timer()
 		wordlist = open(wordlist, "r")
 		word = wordlist.readlines()
@@ -812,10 +824,13 @@ class cracker:
 				o=o.strip()
 				wordlistsha1 = hashlib.sha512(o).hexdigest()
 				if i==wordlistsha1:
-					print "Hash Found : "+o+" : "+i
-			stop = timeit.default_timer()
-		print "Elapsed Time : "+str(stop - start)+"s"
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+o+" : "+i+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 	def ntlm(self,wordlist, ha):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" NTLM HASH PATH : "+ha+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH  : "+wordlist+color.ENDC)
+		start = timeit.default_timer()
 		wordlist = open(wordlist, "r")
 		wordlist = wordlist.readlines()
 		ha = open(ha, "r")
@@ -825,7 +840,9 @@ class cracker:
 			h = nthash.encrypt(word)
 			for has in ha:
 				if has == h:
-					print "Found : "+has+" : "+word
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+has+" : "+word+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 
 ###
 ###EXPLOIT 0DAY
@@ -1200,21 +1217,27 @@ def __main__():
 			brf = options.brf
 			if url and php==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : PHP"+color.ENDC)
 				BruteForce.admin_brute().php_admin(url)
 			if url and asp==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : ASP"+color.ENDC)
 				BruteForce.admin_brute().asp_admin(url)
 			if url and cfm==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : CFM"+color.ENDC)
 				BruteForce.admin_brute().cfm_admin(url)
 			if url and js==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : JS"+color.ENDC)
 				BruteForce.admin_brute().js_admin(url)
 			if url and cgi==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : CGI"+color.ENDC)
 				BruteForce.admin_brute().cgi_admin(url)
 			if url and brf==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
+				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : BRF"+color.ENDC)
 				BruteForce.admin_brute().php_admin(url)
 if __name__ == '__main__':
 	try:
