@@ -57,10 +57,10 @@ def __help__():
 	print (color.W+"\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution")
 	print (color.W+"\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit")
 	print (color.W+color.BOLD+color.Y+"Dorking : "+color.ENDC)
-	print (color.W+"\t+ Google Dorker         : google_dorker(LFI)| Google Dorker ")
-	print (color.W+"\t+ Bing Dorker           : bing_dorker(LFI)  | Bing Dorker via IP")
+	print (color.W+"\t+ Google Dorker         : google_dorker(LFI)     | Google Dorker ")
+	print (color.W+"\t+ Bing Dorker           : bing_dorker(LFI)       | Bing Dorker via IP")
 	print (color.W+color.BOLD+color.Y+"Cracking : "+color.ENDC)
-	print (color.W+"\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack MD5-SHA* HASH\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384")
+	print (color.W+"\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack Hash\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384\n\t\t     MSSQL2000-MSSQL2005\n\t\t     MYSQL41-ORACLE11\n\t\t     MYSQL323 HASHs")
 
 def __update__():
 	pass
