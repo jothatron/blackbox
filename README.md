@@ -11,6 +11,11 @@
 + ######SHA256 CRACKER
 + ######SHA384 CRACKER
 + ######SHA512 CRACKER
++ ######MSSQL2000 CRACKER
++ ######MSSQL2005 CRACKER
++ ######MYSQL323 CRACKER
++ ######MYSQL41 CRACKER
++ ######ORACLE11 CRACKER
 
 #### Web Hacking :
 + ######Wordpress Bruteforce – Bruteforce wordpress panel
@@ -43,3 +48,6 @@ $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox &&
 + ######Fix some python error 
 + ######Fix Admin page finder
 + ######Fix Hash cracker
+###1.6v:
++ ######Fix Google Dorker
++ ######Add MSSQL2000, MSSQL2005, MYSQL323, MYSQL41, ORACLE11 CRACKER
