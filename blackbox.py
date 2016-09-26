@@ -423,7 +423,7 @@ class admin_finder:
 			elif get==404:
 				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
 			else:
-				print (str(get)+" : "+full)
+				print (color.W+color.BOLD+"[-] Response "+str(get)+"       : "+full)
     def asp_admin(self,url):
 		asp = self.asp
 		for admin in asp:
@@ -440,7 +440,8 @@ class admin_finder:
 			elif get==404:
 				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
 			else:
-				print (str(get)+" : "+full)
+				print (color.W+color.BOLD+"[-] Response "+str(get)+"       : "+full)
+
     def cfm_admin(self,url):
 		cfm = self.cfm
 		for admin in cfm:
@@ -457,7 +458,8 @@ class admin_finder:
 			elif get==404:
 				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
 			else:
-				print (str(get)+" : "+full)
+				print (color.W+color.BOLD+"[-] Response "+str(get)+"       : "+full)
+
     def js_admin(self,url):
 		js = self.js
 		for admin in js:
@@ -474,7 +476,8 @@ class admin_finder:
 			elif get==404:
 				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
 			else:
-				print (str(get)+" : "+full)
+				print (color.W+color.BOLD+"[-] Response "+str(get)+"       : "+full)
+
     def cgi_admin(self,url):
 		cgi = self.cgi
 		for admin in cgi:
@@ -491,7 +494,8 @@ class admin_finder:
 			elif get==404:
 				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
 			else:
-				print (str(get)+" : "+full)
+				print (color.W+color.BOLD+"[-] Response "+str(get)+"       : "+full)
+
     def brf_admin(self,url):
 		brf = self.brf
 		for admin in brf:
@@ -508,7 +512,8 @@ class admin_finder:
 			elif get==404:
 				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
 			else:
-				print (str(get)+" : "+full)
+				print (color.W+color.BOLD+"[-] Response "+str(get)+"       : "+full)
+
 ###
 ###BRUTEFORCING TOOLS
 ###
