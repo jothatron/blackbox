@@ -293,17 +293,7 @@ class dorker:
 		print (color.G+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(url))+" FOUND"+color.ENDC)
 	pass
 
-
-###
-###BRUTEFORCING TOOLS
-###
-####################################
-##                                ##
-##   BruteForcing WP/JM/FTP/SSH   ##
-##                                ##
-####################################
-
-class BruteForce:
+class admin_finder:
     php = ['admin/','administrator/','admin1/','admin2/','admin3/','admin4/','admin5/','usuarios/','usuario/','administrator/','moderator/','webadmin/','adminarea/','bb-admin/','adminLogin/','admin_area/','panel-administracion/','instadmin/',
     'memberadmin/','administratorlogin/','adm/','admin/account.php','admin/index.php','admin/login.php','admin/admin.php','admin/account.php',
     'admin_area/admin.php','admin_area/login.php','siteadmin/login.php','siteadmin/index.php','siteadmin/login.html','admin/account.html','admin/index.html','admin/login.html','admin/admin.html',
@@ -417,111 +407,118 @@ class BruteForce:
     'adminarea/admin.brf','adminarea/login.brf','panel-administracion/index.brf','panel-administracion/admin.brf','modelsearch/index.brf',
     'modelsearch/admin.brf','admincontrol/login.brf','adm/admloginuser.brf','admloginuser.brf','admin2.brf','admin2/login.brf','admin2/index.brf','usuarios/login.brf',
     'adm/index.brf','adm.brf','affiliate.brf','adm_auth.brf','memberadmin.brf','administratorlogin.brf']
-    class admin_brute:
-        def php_admin(self,url):
-            php = BruteForce.php
-            for admin in php:
-                admin=admin.strip()
-                full = url+"/"+admin
-                r = requests.get(full)
-                get = r.status_code
-                if get == 200:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
-                elif get == 403:
-                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
-                elif get == 302:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
-                elif get==404:
-                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
-                else:
-                    print (get+" : "+full)
-        def asp_admin(self,url):
-            asp = BruteForce.asp
-            for admin in asp:
-                admin=admin.strip()
-                full = url+"/"+admin
-                r = requests.get(full)
-                get = r.status_code
-                if get == 200:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
-                elif get == 403:
-                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
-                elif get == 302:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
-                elif get==404:
-                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
-                else:
-                    print (get+" : "+full)
-        def cfm_admin(self,url):
-            cfm = BruteForce.cfm
-            for admin in cfm:
-                admin=admin.strip()
-                full = url+"/"+admin
-                r = requests.get(full)
-                get = r.status_code
-                if get == 200:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
-                elif get == 403:
-                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
-                elif get == 302:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
-                elif get==404:
-                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
-                else:
-                    print (get+" : "+full)
-        def js_admin(self,url):
-            js = BruteForce.js
-            for admin in js:
-                admin=admin.strip()
-                full = url+"/"+admin
-                r = requests.get(full)
-                get = r.status_code
-                if get == 200:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
-                elif get == 403:
-                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
-                elif get == 302:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
-                elif get==404:
-                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
-                else:
-                    print (get+" : "+full)
-        def cgi_admin(self,url):
-            cgi = BruteForce.cgi
-            for admin in cgi:
-                admin=admin.strip()
-                full = url+"/"+admin
-                r = requests.get(full)
-                get = r.status_code
-                if get == 200:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
-                elif get == 403:
-                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
-                elif get == 302:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
-                elif get==404:
-                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
-                else:
-                    print (get+" : "+full)
-        def brf_admin(self,url):
-            brf = BruteForce.brf
-            for admin in brf:
-                admin=admin.strip()
-                full = url+"/"+admin
-                r = requests.get(full)
-                get = r.status_code
-                if get == 200:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
-                elif get == 403:
-                    print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
-                elif get == 302:
-                    print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
-                elif get==404:
-                    print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
-                else:
-                    print (get+" : "+full)
-        def __init__(self):
-        	pass
+    def php_admin(self,url):
+		php = self.php
+		for admin in php:
+			admin=admin.strip()
+			full = url+"/"+admin
+			r = requests.get(full)
+			get = r.status_code
+			if get == 200:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+			elif get == 403:
+				print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+			elif get == 302:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+			elif get==404:
+				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+			else:
+				print (get+" : "+full)
+    def asp_admin(self,url):
+		asp = self.asp
+		for admin in asp:
+			admin=admin.strip()
+			full = url+"/"+admin
+			r = requests.get(full)
+			get = r.status_code
+			if get == 200:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+			elif get == 403:
+				print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+			elif get == 302:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+			elif get==404:
+				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+			else:
+				print (get+" : "+full)
+    def cfm_admin(self,url):
+		cfm = self.cfm
+		for admin in cfm:
+			admin=admin.strip()
+			full = url+"/"+admin
+			r = requests.get(full)
+			get = r.status_code
+			if get == 200:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+			elif get == 403:
+				print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+			elif get == 302:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+			elif get==404:
+				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+			else:
+				print (get+" : "+full)
+    def js_admin(self,url):
+		js = self.js
+		for admin in js:
+			admin=admin.strip()
+			full = url+"/"+admin
+			r = requests.get(full)
+			get = r.status_code
+			if get == 200:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+			elif get == 403:
+				print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+			elif get == 302:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+			elif get==404:
+				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+			else:
+				print (get+" : "+full)
+    def cgi_admin(self,url):
+		cgi = self.cgi
+		for admin in cgi:
+			admin=admin.strip()
+			full = url+"/"+admin
+			r = requests.get(full)
+			get = r.status_code
+			if get == 200:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+			elif get == 403:
+				print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+			elif get == 302:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+			elif get==404:
+				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+			else:
+				print (get+" : "+full)
+    def brf_admin(self,url):
+		brf = self.brf
+		for admin in brf:
+			admin=admin.strip()
+			full = url+"/"+admin
+			r = requests.get(full)
+			get = r.status_code
+			if get == 200:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Admin Page Found ! : "+color.ENDC+full)
+			elif get == 403:
+				print (color.R+color.BOLD+"[-]"+color.BOLD+" Forbidden          : "+color.ENDC+full)
+			elif get == 302:
+				print (color.Y+color.BOLD+"[+]"+color.BOLD+" Redirect           : "+color.ENDC+full)
+			elif get==404:
+				print (color.W+color.BOLD+"[-]"+color.BOLD+" Not Found          : "+color.ENDC+full)
+			else:
+				print (get+" : "+full)
+###
+###BRUTEFORCING TOOLS
+###
+####################################
+##                                ##
+##   BruteForcing WP/JM/FTP/SSH   ##
+##                                ##
+####################################
+
+class BruteForce:
 	def wordpress(self, url, username,wordlist):
 		headers = {
 		'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:28.0) Gecko/20100101 Firefox/28.0'
@@ -576,9 +573,6 @@ class BruteForce:
 		except pexpect.pxssh.ExceptionPxssh:
 			print (color.R+color.BOLD+"[-]"+color.ENDC+color.BOLD+" Error via Password : "+password+color.ENDC)
 			pass
-	def joomla(self, url, wordlist):
-		pass
-
 
 ###
 ###RCE EXPLOIT
@@ -1329,27 +1323,27 @@ def __main__():
 			if url and php==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : PHP"+color.ENDC)
-				BruteForce.admin_brute().php_admin(url)
+				admin_finder().php_admin(url)
 			if url and asp==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : ASP"+color.ENDC)
-				BruteForce.admin_brute().asp_admin(url)
+				admin_finder().asp_admin(url)
 			if url and cfm==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : CFM"+color.ENDC)
-				BruteForce.admin_brute().cfm_admin(url)
+				admin_finder().cfm_admin(url)
 			if url and js==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : JS"+color.ENDC)
-				BruteForce.admin_brute().js_admin(url)
+				admin_finder().js_admin(url)
 			if url and cgi==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : CGI"+color.ENDC)
-				BruteForce.admin_brute().cgi_admin(url)
+				admin_finder().cgi_admin(url)
 			if url and brf==True:
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" URL                : "+url+color.ENDC)
 				print (color.C+color.BOLD+"[+]"+color.ENDC+color.BOLD+" SOURCE             : BRF"+color.ENDC)
-				BruteForce.admin_brute().php_admin(url)
+				admin_finder().brf_admin(url)
 if __name__ == '__main__':
 	try:
 		__main__()
