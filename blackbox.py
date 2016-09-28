@@ -40,7 +40,7 @@ def __banner__():
 	print (color.BOLD+color.Y+"| __  |  |  |  _  |     |  |  | __  |     | _ _")
 	print (color.BOLD+color.Y+"| __ -|  |__|     |   --|    -| __ -|  |  ||_'_|")
 	print (color.BOLD+color.Y+"|_____|_____|__|__|_____|__|__|_____|_____||_,_|")
-	print (color.W+color.BOLD+"                                                {"+color.M+__version__+"#Dev"+color.W+"}"+color.ENDC)
+	print (color.W+color.BOLD+"                                                {"+color.R+__version__+"#Dev"+color.W+"}"+color.ENDC)
 
 def __help__():
 	print (color.W+color.BOLD+"Usage   : "+color.W+sys.argv[0]+color.R+" {Module}"+color.ENDC)
