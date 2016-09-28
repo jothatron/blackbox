@@ -48,6 +48,13 @@ $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox &&
 + ######Fix some python error 
 + ######Fix Admin page finder
 + ######Fix Hash cracker
+--------------------------------------
 ###1.6v:
 + ######Fix Google Dorker
 + ######Add MSSQL2000, MSSQL2005, MYSQL323, MYSQL41, ORACLE11 CRACKER
+--------------------------------------
+###1.7v:
++ ######Fix Admin finder
++ ######Fix SSH bruteforcer
++ ######Fix FTP bruteforcer
++ ######Add Help menu & add how to use module
