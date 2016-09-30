@@ -28,7 +28,7 @@
 + ######Joomla  Rce          – 1.5 - 3.4.5 remote code execution
 + ######Google Dorker        – google dorker (LFI SCANNER)
 + ######Bing Dorker          – bing dorker (LFI SCANNER )
-+ ######Prestashop Exploit   – PrestaShop Arbitrary file Upload (6 Modules)
++ ######Prestashop Exploit   – PrestaShop Arbitrary file Upload (9 Modules)
 
 ####Installation :
 ```bash
