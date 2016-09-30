@@ -34,6 +34,11 @@
 ```bash
 $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox && chmod +x install && sudo ./install && cd
 ```
+--------------------------------------------------------------------
+####NOTICE : 
+######leave your email if you create an issue! & tnx :)
+--------------------------------------------------------------------
+
 ##Version :
 --------------------------------------
 ###1.4v:
