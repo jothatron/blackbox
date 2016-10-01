@@ -18,6 +18,7 @@
 ### MAGENTO RCE : https://www.exploit-db.com/exploits/37977/                                                                 ###
 ### PRESTASHOP EXPLOIT : http://0day.today/exploit/25260 , http://0day.today/exploit/25261 , http://0day.today/exploit/25259 ###
 ### ADMIN PAGE FINDER  : https://packetstormsecurity.com/files/112855/Admin-Page-Finder-Script.html                          ###
+### XSS/SQLI/RCE SCANNER FROM : https://github.com/zigoo0/webpwn3r !                                                         ###
 ################################################################################################################################
 import requests,json,sys, time, re, os, base64, random,hashlib,timeit,ftplib,pexpect,urllib2,urllib
 from sys import platform
