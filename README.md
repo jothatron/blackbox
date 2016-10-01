@@ -63,3 +63,6 @@ $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox &&
 + ######Fix SSH bruteforcer
 + ######Fix FTP bruteforcer
 + ######Add Help menu & add how to use module
+###1.8v:
++ ######ADD XSS/SQLi/RCE Scanner to google & bing dorker module !
++ ######Fix LFI & Hashkiller modules
