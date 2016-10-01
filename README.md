@@ -66,3 +66,4 @@ $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox &&
 ###1.8v:
 + ######ADD XSS/SQLi/RCE Scanner to google & bing dorker module !
 + ######Fix LFI & Hashkiller modules
++ ######ADD 3 Modules prestashop exploi
