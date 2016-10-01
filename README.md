@@ -26,8 +26,8 @@
 + ######Dnsinfo              – dns info via Yougetsignal & viewdns & hackertarget
 + ######Magento Rce          – Magento eCommerce - Remote Code Execution
 + ######Joomla  Rce          – 1.5 - 3.4.5 remote code execution
-+ ######Google Dorker        – google dorker (LFI SCANNER)
-+ ######Bing Dorker          – bing dorker (LFI SCANNER )
++ ######Google Dorker        – google dorker (LFI/SQLi/XSS/RCE SCANNER)
++ ######Bing Dorker          – bing dorker (LFI/SQLi/XSS/RCE SCANNER )
 + ######Prestashop Exploit   – PrestaShop Arbitrary file Upload (9 Modules)
 
 ####Installation :
