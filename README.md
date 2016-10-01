@@ -1,9 +1,9 @@
 ### BLACKBOx – A Penetration Testing Framework
 
-[![Python 2.7](https://img.shields.io/badge/python-2.7-yellow.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-GPLv2-red.svg)](https://bitbucket.org/darkeye/blackbox/raw/master/COPYING)
-[![Twitter](https://img.shields.io/badge/twitter-@blackeye-blue.svg)](https://twitter.com/S44DH4T)
-[![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg)](https://www.facebook.com/S44DH4T)
+[![Python 2.7](https://img.shields.io/badge/python-2.7-yellow.svg?style=flat-square)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-GPLv2-red.svg?style=flat-square)](https://bitbucket.org/darkeye/blackbox/raw/master/COPYING)
+[![Twitter](https://img.shields.io/badge/twitter-@blackeye-blue.svg?style=flat-square)](https://twitter.com/S44DH4T)
+[![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg?style=flat-square)](https://www.facebook.com/S44DH4T)
 #### Password Attacks: 
 + ######MD5 CRACKER
 + ######SHA1  CRACKER
