@@ -46,20 +46,20 @@ def __banner__():
 def __help__():
 	print (color.W+color.BOLD+"Usage   : "+color.W+sys.argv[0]+color.R+" {Module}"+color.W+" -h/--help"+color.ENDC)
 	print (color.BOLD+color.Y+"Bruteforcing : "+color.ENDC)
-	print (color.W+"\t+ Wordpress Bruteforce  : wordpress_brute        | Bruteforcing WP PANEL")
-	print (color.W+"\t+ Admin Page Finder     : admin_brute            | Find Admin Page")
+	print (color.W+"\t+ Wordpress Bruteforce : wordpress_brute | Bruteforcing WP PANEL")
+	print (color.W+"\t+ Admin Page Finder    : admin_brute     | Find Admin Page")
 	#print (color.W+"\t+ PMA Page Finder       : pma_brute              | Find PhpMyAdmin Page")
-	print (color.W+"\t+ SSH Bruteforce        : ssh_brute              | Bruteforcing SSH LOGIN")
-	print (color.W+"\t+ FTP Bruteforce        : ftp_brute              | Bruteforcing FTP LOGIN")
+	print (color.W+"\t+ SSH Bruteforce       : ssh_brute       | Bruteforcing SSH LOGIN")
+	print (color.W+"\t+ FTP Bruteforce       : ftp_brute       | Bruteforcing FTP LOGIN")
 	print (color.W+color.BOLD+color.Y+"Information Gathering : "+color.ENDC)
-	print (color.W+"\t+ Dnsinfo               : dns_info               | Get All Website from IP")
+	print (color.W+"\t+ Dnsinfo : dns_info               | Get All Website from IP")
 	print (color.W+color.BOLD+color.Y+"Exploit : "+color.ENDC)
-	print (color.W+"\t+ Joomla Rce            : rce_joomla             | 1.5 - 3.4.5 remote code execution")
-	print (color.W+"\t+ Magento Rce           : rce_magento            | Magento eCommerce - Remote Code Execution")
-	print (color.W+"\t+ PrestaShop Exploit    : presta_exploit         | Prestashop Multi Modules Arbitrary File Upload Exploit")
+	print (color.W+"\t+ Joomla Rce         : rce_joomla       | 1.5 - 3.4.5 remote code execution")
+	print (color.W+"\t+ Magento Rce        : rce_magento      | Magento eCommerce - Remote Code Execution")
+	print (color.W+"\t+ PrestaShop Exploit : presta_exploit   | Prestashop Multi Modules Arbitrary File Upload Exploit")
 	print (color.W+color.BOLD+color.Y+"Dorking : "+color.ENDC)
-	print (color.W+"\t+ Google Dorker         : google_dorker(LFI)     | Google Dorker ")
-	print (color.W+"\t+ Bing Dorker           : bing_dorker(LFI)       | Bing Dorker via IP")
+	print (color.W+"\t+ Google Dorker : google_dorker(LFI/RCE/XSS/SQLi) | Google Dorker ")
+	print (color.W+"\t+ Bing Dorker   : bing_dorker(LFI/RCE/XSS/SQLi)   | Bing Dorker via IP")
 	print (color.W+color.BOLD+color.Y+"Cracking : "+color.ENDC)
 	print (color.W+"\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack Hash\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384\n\t\t     MSSQL2000-MSSQL2005\n\t\t     MYSQL41-ORACLE11\n\t\t     MYSQL323 HASHs")
 
@@ -1525,5 +1525,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print (color.BOLD+color.Y+"Exiting Now !"+color.ENDC)
 		sys.exit(0)
-	except urllib2.HTTPError:
-		print (color.BOLD+color.Y+"Error, Retry Later !"+color.ENDC)
+	#except urllib2.HTTPError:
+	#	print (color.BOLD+color.Y+"Error, Retry Later !"+color.ENDC)
