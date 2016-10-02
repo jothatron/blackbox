@@ -40,7 +40,7 @@ $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox &&
 --------------------------------------------------------------------
 
 ##Version :
---------------------------------------
+--------------------------------------------------------------------
 ###1.4v:
 + ######Add Prestashop Exploit
 + ######Add Admin Page finder 
@@ -67,3 +67,6 @@ $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox &&
 + ######ADD XSS/SQLi/RCE Scanner to google & bing dorker module !
 + ######Fix LFI & Hashkiller modules
 + ######ADD 3 Modules prestashop exploit
+###1.9v:
++ ######FIX RCE JOOMLA & MAGENTO & PRESTASHOP EXPLOIT
++ ######FIX XSS SCANNER

