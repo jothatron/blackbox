@@ -29,6 +29,7 @@
 + ######Google Dorker        – google dorker (LFI/SQLi/XSS/RCE SCANNER)
 + ######Bing Dorker          – bing dorker (LFI/SQLi/XSS/RCE SCANNER )
 + ######Prestashop Exploit   – PrestaShop Arbitrary file Upload (9 Modules)
++ ######Scan list            – Scan url in list from Vuln (SQLi/RCE/XSS/LFI)
 
 ####Installation :
 ```bash
