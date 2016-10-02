@@ -61,6 +61,7 @@ def __help__():
 	print (color.W+color.BOLD+color.Y+"Dorking : "+color.ENDC)
 	print (color.W+"\t+ Google Dorker : google_dorker(LFI/RCE/XSS/SQLi) | Google Dorker ")
 	print (color.W+"\t+ Bing Dorker   : bing_dorker(LFI/RCE/XSS/SQLi)   | Bing Dorker via IP")
+	print (color.W+"\t+ Scan List     : scan_list(LFI/RCE/XSS/SQLi)     | Scan url in list !")
 	print (color.W+color.BOLD+color.Y+"Cracking : "+color.ENDC)
 	print (color.W+"\t+ Crack Hash MD5-SHA512 : hash_killer            | Crack Hash\n\t\t     SHA1-SHA224\n\t\t     SHA256-SHA384\n\t\t     MSSQL2000-MSSQL2005\n\t\t     MYSQL41-ORACLE11\n\t\t     MYSQL323 HASHs")
 
