@@ -29,11 +29,13 @@ from urllib import FancyURLopener
 from passlib.hash import mssql2000 as m20,oracle11 as oracle11,mssql2005 as m25, mysql323, mysql41
 from pexpect import pxssh
 from ftplib import FTP
-__author__     = 'BLACK EYE'
+__nickname__   = 'BLACK EYE'
+__author__     = 'Saad Hat'
 __bitbucket__  = 'https://bitbucket.org/darkeye/'
 __emailadd__   = 'blackdoor197@riseup.net'
-__twitter__    = 'https://twitter.com/0x676'
-__version__    = '1.9'
+__twitter__    = 'https://twitter.com/S44DH4T'
+__facebook__   = 'https://facebook.com/S44DH4T'
+__version__    = '2.0'
 __license__    = 'GPLv2'
 __scrname__    = 'BLACKBOx v%s' % (__version__)
 
