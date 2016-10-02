@@ -70,3 +70,5 @@ $ git clone https://darkeye@bitbucket.org/darkeye/blackbox.git && cd blackbox &&
 ###1.9v:
 + ######FIX RCE JOOMLA & MAGENTO & PRESTASHOP EXPLOIT
 + ######FIX XSS SCANNER
+###2.0v:
++ ######ADD SCANNING VIA LIST & FIX LFI SCANNER

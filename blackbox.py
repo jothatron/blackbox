@@ -134,16 +134,20 @@ class scanner:
 		for i in lfi:
 			print (color.R+color.BOLD+"[+] "+color.W+"TARGET : "+url+color.ENDC)
 			l=re.sub(i, '', url)
+			vuln = 0
 			for payload in payloads:
 				payload=payload.strip()
-				print (color.R+color.BOLD+"[+] "+color.W+"Payload : "+payload+color.ENDC)
+				print (color.G+color.BOLD+"\t[+] "+color.W+" Payload : "+payload+color.ENDC)
 				lfii = l+payload
 				r = requests.get(lfii)
 				html = r.content
 				if "root" in html:
-					print (color.R+color.BOLD+"[+] "+color.W+" LFI FOUND : "+lfii+color.ENDC)
+					print (color.R+color.BOLD+"\t[+] "+color.R+" LFI FOUND : "+lfii+color.ENDC)
+					vuln+=1
 				else:
+					print (color.B+color.BOLD+"\t[+] "+color.B+" NOT FOUND : "+lfii+color.ENDC)
 					pass
+			print color.W+"[!] %i LFI FOUNDED " % (vuln) +color.ENDC
 	def run(self,url, payloads, check):
 		opener = requests.get(url)
 		vuln = 0
@@ -1507,6 +1511,53 @@ def __main__():
 			if (len(errors) > 0):
 				for error in errors:
 					print (color.BOLD+error+color.ENDC)
+		if (arg=="scan_list"):
+			sl_hp = color.W+color.BOLD+sys.argv[0]+' scan_list -l/--list [PATH] --[LFI/SQLi/RCE/XSS]\nExample: '+sys.argv[0]+' scan_list /path/to/list --sqli'+color.ENDC
+			parser = OptionParser(usage=sl_hp)
+			parser.add_option("--lists","-l",
+				help="LIST COUNTAIN URLs !")
+			parser.add_option("--sqli",
+			help="Scan Founded website from SQLi", action="store_true")
+			parser.add_option("--xss",
+			help="Scan Founded website from XSS", action="store_true")
+			parser.add_option("--rce",
+			help="Scan Founded website from RCE", action="store_true")
+			parser.add_option("--lfi",
+			help="Scan Founded website from LFI", action="store_true")
+			(options,args) = parser.parse_args()
+			lists = options.lists
+			sqli = options.sqli
+			xss = options.xss
+			rce = options.rce
+			lfi = options.lfi
+			if lists and sqli==True:
+				print (color.R+color.BOLD+"SQLi Scanner : "+color.ENDC)
+				lists = open(lists, "r")
+				lists = lists.readlines()
+				for i in lists:
+					i=i.strip()
+					scanner().sqli(i)
+			if lists and xss==True:
+				print (color.R+color.BOLD+"XSS Scanner : "+color.ENDC)
+				lists = open(lists, "r")
+				lists = lists.readlines()
+				for i in lists:
+					i=i.strip()
+					scanner().xss(i)
+			if lists and rce==True:
+				print (color.R+color.BOLD+"RCE Scanner : "+color.ENDC)
+				lists = open(lists, "r")
+				lists = lists.readlines()
+				for i in lists:
+					i=i.strip()
+					scanner().rce(i)
+			if lists and lfi==True:
+				print (color.R+color.BOLD+"LFI Scanner : "+color.ENDC)
+				lists = open(lists, "r")
+				lists = lists.readlines()
+				for i in lists:
+					i=i.strip()
+					scanner().lfi(i)
 if __name__ == '__main__':
 	try:
 		__main__()
