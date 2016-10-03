@@ -15,7 +15,7 @@ chmod +x /bin/blackbox
 rm -rf blackbox/
 blackbox
 if [ $? -eq 0 ]; then
-	echo "WORKED ! NOW YOU CAN USE command : blackbox"
+	echo "WORKED ! NOW YOU CAN USE command! : blackbox"
 else
     echo "ERROR FAIL!"
 fi
