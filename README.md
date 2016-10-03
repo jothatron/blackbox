@@ -5,7 +5,7 @@
 [![Twitter](https://img.shields.io/badge/twitter-@blackeye-blue.svg?style=flat-square)](https://twitter.com/S44DH4T)
 [![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg?style=flat-square)](https://www.facebook.com/S44DH4T)
 #### Password Attacks: 
-+ ######MD5 CRACKER
++ MD5 CRACKER
 + ######SHA1  CRACKER
 + ######SHA224 CRACKER
 + ######SHA256 CRACKER
