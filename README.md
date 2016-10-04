@@ -5,17 +5,7 @@
 [![Twitter](https://img.shields.io/badge/twitter-@blackeye-blue.svg?style=flat-square)](https://twitter.com/S44DH4T)
 [![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg?style=flat-square)](https://www.facebook.com/S44DH4T)
 #### Password Attacks:
-+ MD5 CRACKER
-+ SHA1  CRACKER
-+ SHA224 CRACKER
-+ SHA256 CRACKER
-+ SHA384 CRACKER
-+ SHA512 CRACKER
-+ MSSQL2000 CRACKER
-+ MSSQL2005 CRACKER
-+ MYSQL323 CRACKER
-+ MYSQL41 CRACKER
-+ ORACLE11 CRACKER
++ MD5, SHA1, SHA224, SHA256, SHA384, SHA512, MSSQL2000, MSSQL2005, MYSQL323, MYSQL41, ORACLE11 CRACKER
 
 #### Web Hacking :
 + Wordpress Bruteforce – Bruteforce wordpress panel
