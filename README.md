@@ -5,31 +5,31 @@
 [![Twitter](https://img.shields.io/badge/twitter-@blackeye-blue.svg?style=flat-square)](https://twitter.com/S44DH4T)
 [![Facebook](https://img.shields.io/badge/facebook-@blackeye-blue.svg?style=flat-square)](https://www.facebook.com/S44DH4T)
 #### Password Attacks:
-###### MD5 CRACKER
-###### SHA1  CRACKER
-###### SHA224 CRACKER
-###### SHA256 CRACKER
-###### SHA384 CRACKER
-###### SHA512 CRACKER
-###### MSSQL2000 CRACKER
-###### MSSQL2005 CRACKER
-###### MYSQL323 CRACKER
-###### MYSQL41 CRACKER
-###### ORACLE11 CRACKER
++ MD5 CRACKER
++ SHA1  CRACKER
++ SHA224 CRACKER
++ SHA256 CRACKER
++ SHA384 CRACKER
++ SHA512 CRACKER
++ MSSQL2000 CRACKER
++ MSSQL2005 CRACKER
++ MYSQL323 CRACKER
++ MYSQL41 CRACKER
++ ORACLE11 CRACKER
 
 #### Web Hacking :
-###### Wordpress Bruteforce – Bruteforce wordpress panel
-###### FTP Bruteforce       – Bruteforcing FTP LOGIN
-###### SSH Bruteforce       – Bruteforcing SSH LOGIN
-###### Admin Page Finder    – Find Admin Page
-###### Prestashop Exploit   – PrestaShop Arbitrary file Upload (6 Modules)
-###### Dnsinfo              – dns info via Yougetsignal & viewdns & hackertarget
-###### Magento Rce          – Magento eCommerce - Remote Code Execution
-###### Joomla  Rce          – 1.5 - 3.4.5 remote code execution
-###### Google Dorker        – google dorker (LFI/SQLi/XSS/RCE SCANNER)
-###### Bing Dorker          – bing dorker (LFI/SQLi/XSS/RCE SCANNER )
-###### Prestashop Exploit   – PrestaShop Arbitrary file Upload (9 Modules)
-###### Scan list            – Scan url in list from Vuln (SQLi/RCE/XSS/LFI)
++ Wordpress Bruteforce – Bruteforce wordpress panel
++ FTP Bruteforce       – Bruteforcing FTP LOGIN
++ SSH Bruteforce       – Bruteforcing SSH LOGIN
++ Admin Page Finder    – Find Admin Page
++ Prestashop Exploit   – PrestaShop Arbitrary file Upload (6 Modules)
++ Dnsinfo              – dns info via Yougetsignal & viewdns & hackertarget
++ Magento Rce          – Magento eCommerce - Remote Code Execution
++ Joomla  Rce          – 1.5 - 3.4.5 remote code execution
++ Google Dorker        – google dorker (LFI/SQLi/XSS/RCE SCANNER)
++ Bing Dorker          – bing dorker (LFI/SQLi/XSS/RCE SCANNER )
++ Prestashop Exploit   – PrestaShop Arbitrary file Upload (9 Modules)
++ Scan list            – Scan url in list from Vuln (SQLi/RCE/XSS/LFI)
 
 ####Installation :
 ```bash
